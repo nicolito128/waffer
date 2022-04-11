@@ -63,6 +63,11 @@ func (msg *Message) GetArguments() []string {
 	return args
 }
 
+// GetPlainContent return the message content without prefix and command.
+func (msg *Message) GetPlainContent() string {
+	return strings.Join(msg.GetArguments(), " ")
+}
+
 // SendChannel sends a message to the message author channel.
 func (msg *Message) SendChannel(str string, args ...any) {
 	message := fmt.Sprintf(str, args...)
@@ -76,7 +81,7 @@ func (msg *Message) SendChannelEmbed(embed *discordgo.MessageEmbed) (*discordgo.
 
 // HasHelPetition return a boolean if the message arguments ends with an "--help".
 func (msg *Message) HasHelpPetition() bool {
-	str := strings.Join(msg.GetArguments(), " ")
+	str := msg.GetPlainContent()
 	ok := strings.HasSuffix(str, "--help")
 	return ok
 }
