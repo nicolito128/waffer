@@ -74,54 +74,10 @@ func (b *Bot) AddCommandsHandler() {
 
 			msg := messages.New(s, m)
 
-			// DM check
-			if m.GuildID == "" {
-				// Command not allowed for dm channels
-				if !cmd.RunInDM {
-					msg.SendChannel("I can't use this command in direct messages.")
-					break
-				}
-			}
-
 			if msg.GetCommand() == cmd.Name {
-				// Help pettion in the command
-				if msg.HasHelpPetition() {
-					msg.SendChannel(cmd.Description)
+				ok := canMessageCommand(cmd, b, m, msg)
+				if !ok {
 					break
-				}
-
-				// Arguments check
-				if cmd.RequiredArgs > 0 {
-					args := msg.GetArguments()
-					if len(args) < cmd.RequiredArgs {
-						msg.SendChannel("I need %d arguments for this command. Ask for help on this command using **%s --help**", cmd.RequiredArgs, msg.GetCommandWithPrefix())
-						break
-					}
-				}
-
-				// Permissions check
-				if cmd.DiscordPermissions > 0 {
-					botPerms, err := s.State.UserChannelPermissions(s.State.User.ID, m.ChannelID)
-					if err != nil {
-						b.logger.Fatal(err.Error())
-						break
-					}
-
-					if (botPerms & cmd.DiscordPermissions) < cmd.DiscordPermissions {
-						msg.SendChannel("Bot permissions are too low.")
-						break
-					}
-
-					perms, err := s.State.MessagePermissions(m.Message)
-					if err != nil {
-						b.logger.Fatal(err.Error())
-						break
-					}
-
-					if (perms & cmd.DiscordPermissions) < cmd.DiscordPermissions {
-						msg.SendChannel("User permissions are too low.")
-						break
-					}
 				}
 
 				go trigger(s, m, msg)
@@ -132,43 +88,9 @@ func (b *Bot) AddCommandsHandler() {
 			if len(cmd.Aliases) >= 1 {
 				for _, alias := range cmd.Aliases {
 					if msg.GetCommand() == alias {
-						// Help pettion in the command
-						if msg.HasHelpPetition() {
-							msg.SendChannel(cmd.Description)
+						ok := canMessageCommand(cmd, b, m, msg)
+						if !ok {
 							break
-						}
-
-						// Arguments check
-						if cmd.RequiredArgs > 0 {
-							args := msg.GetArguments()
-							if len(args) < cmd.RequiredArgs {
-								msg.SendChannel("I need another %d arguments. Ask for help on this command using %s --help", cmd.RequiredArgs, msg.GetCommandWithPrefix())
-								break
-							}
-						}
-
-						// Permissions check
-						if cmd.DiscordPermissions != 0 {
-							botPerms, err := s.State.UserChannelPermissions(s.State.User.ID, m.ChannelID)
-							if err != nil {
-								b.logger.Fatal(err.Error())
-								break
-							}
-
-							if (botPerms & cmd.DiscordPermissions) < cmd.DiscordPermissions {
-								msg.SendChannel("Bot permissions are too low.")
-								break
-							}
-
-							perms, err := s.State.MessagePermissions(m.Message)
-							if err != nil {
-								b.logger.Fatal(err.Error())
-								break
-							}
-							if (perms & cmd.DiscordPermissions) < cmd.DiscordPermissions {
-								msg.SendChannel("User permissions are too low.")
-								break
-							}
 						}
 
 						go trigger(s, m, msg)
