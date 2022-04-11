@@ -1,5 +1,8 @@
 # Waffer - Discord Bot
+[![Go Report Card](https://goreportcard.com/badge/github.com/nicolito128/waffer)](https://goreportcard.com/report/github.com/nicolito128/waffer)
+
 A discord bot written in Go.
+
 
 <img align="right" alt="Waffer logo" src="https://i.imgur.com/guq55Wb_d.png" width="150">
 
