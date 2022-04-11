@@ -13,6 +13,14 @@ func AddCommands() {
 		ping.Command)
 }
 
+func HasCommand(commandName string) bool {
+	if commands.CommandList[commandName] != nil {
+		return true
+	}
+
+	return false
+}
+
 func GetCommandList() commands.CList {
 	return commands.CommandList
 }

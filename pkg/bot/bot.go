@@ -65,40 +65,25 @@ func (b *Bot) Run() {
 func (b *Bot) AddCommandsHandler() {
 	b.session.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) {
 		clist := stdcommands.GetCommandList()
-		for cmd, trigger := range clist {
+		msg := messages.New(s, m)
+
+		commandName := msg.GetCommand()
+		existsCommand := stdcommands.HasCommand(commandName)
+		if existsCommand {
+			cmd := clist[commandName]
+
 			// Basic verification for no-bot attention.
 			err := checks.Generals(s, m)
 			if err != nil {
-				break
+				return
 			}
 
-			msg := messages.New(s, m)
-
-			if msg.GetCommand() == cmd.Name {
-				ok := canMessageCommand(cmd, b, m, msg)
-				if !ok {
-					break
-				}
-
-				go trigger(s, m, msg)
-				break
+			ok := canMessageCommand(cmd, b, m, msg)
+			if !ok {
+				return
 			}
 
-			// If aliases exists
-			if len(cmd.Aliases) >= 1 {
-				for _, alias := range cmd.Aliases {
-					if msg.GetCommand() == alias {
-						ok := canMessageCommand(cmd, b, m, msg)
-						if !ok {
-							break
-						}
-
-						go trigger(s, m, msg)
-						break
-					}
-				}
-			}
-
+			go cmd.GetTrigger(s, m, msg)
 		}
 	})
 }
