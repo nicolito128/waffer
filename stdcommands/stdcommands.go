@@ -2,6 +2,7 @@ package stdcommands
 
 import (
 	"github.com/nicolito128/waffer/plugins/commands"
+	"github.com/nicolito128/waffer/stdcommands/avatar"
 	"github.com/nicolito128/waffer/stdcommands/dev"
 	"github.com/nicolito128/waffer/stdcommands/ping"
 )
@@ -13,6 +14,7 @@ func AddCommands() {
 	commands.AddRootCommands(
 		ping.Command,
 		dev.Command,
+		avatar.Command,
 	)
 }
 
