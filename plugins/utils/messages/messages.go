@@ -40,7 +40,7 @@ func (msg *Message) GetCommandWithPrefix() string {
 // GetCommand return the command without prefix: Ex: 'CommandName'
 func (msg *Message) GetCommand() string {
 	cmd := msg.GetCommandWithPrefix()
-	cmdNoPrefix := strings.TrimPrefix(cmd, prefix)
+	cmdNoPrefix := strings.TrimPrefix(cmd, msg.Prefix)
 	return cmdNoPrefix
 }
 
