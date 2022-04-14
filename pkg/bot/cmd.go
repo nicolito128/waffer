@@ -1,6 +1,9 @@
 package bot
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/plugins/utils/messages"
 	"github.com/nicolito128/waffer/stdcommands"
@@ -18,7 +21,10 @@ func canMessageCommand(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.Messa
 
 	// Help pettion in the command
 	if msg.HasHelpPetition() {
-		msg.SendChannel(cmd.Description)
+		_, err := msg.SendChannelEmbed(getHelpEmbed(cmd))
+		if err != nil {
+			b.logger.Fatal(err.Error())
+		}
 		return false
 	}
 
@@ -57,4 +63,30 @@ func canMessageCommand(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.Messa
 	}
 
 	return true
+}
+
+func getHelpEmbed(cmd stdcommands.WafferCommand) *discordgo.MessageEmbed {
+	var args string
+	if len(cmd.Arguments) == 0 {
+		args = ""
+	} else {
+		args = "`" + strings.Join(cmd.Arguments, " ") + "`"
+	}
+
+	desc := fmt.Sprintf(`
+		**Description**: %s
+		**Aliases**: %s
+		**Arguments**: %s
+		**Category**: %s
+	`,
+		cmd.Description,
+		"`"+strings.Join(cmd.Aliases, " ")+"`",
+		args,
+		"`"+cmd.Category+"`",
+	)
+
+	return &discordgo.MessageEmbed{
+		Title:       cmd.Name,
+		Description: desc,
+	}
 }
