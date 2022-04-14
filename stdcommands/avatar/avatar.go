@@ -3,7 +3,6 @@ package avatar
 import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/plugins/commands"
-	"github.com/nicolito128/waffer/plugins/utils/messages"
 )
 
 var Command = &commands.WafferCommand{
@@ -22,7 +21,7 @@ var Command = &commands.WafferCommand{
 	RunFunc: func(data *commands.HandlerData) {
 		var avatarURL string
 		var user *discordgo.User
-		msg := messages.New(data.S, data.MC)
+		msg := data.Message
 		mentions := data.MC.Mentions
 
 		if len(mentions) >= 1 {
