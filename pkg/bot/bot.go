@@ -3,6 +3,7 @@ package bot
 import (
 	"os"
 	"os/signal"
+	"strings"
 	"syscall"
 	"time"
 
@@ -69,7 +70,7 @@ func (b *Bot) AddCommandsHandler() {
 
 		commandName := msg.GetCommand()
 		existsCommand := stdcommands.HasCommand(commandName)
-		if existsCommand {
+		if existsCommand && strings.HasPrefix(msg.Content, msg.GetCommandWithPrefix()) {
 			cmd := clist[commandName]
 
 			// Basic verification for no-bot attention.

@@ -34,6 +34,9 @@ func New(s *discordgo.Session, m *discordgo.MessageCreate) *Message {
 // GetCommandWithPrefix return the command with the bot prefix: Ex: 'prefixCommandName'
 func (msg *Message) GetCommandWithPrefix() string {
 	args := strings.Split(msg.Content, " ")
+	if !strings.HasPrefix(args[0], msg.Prefix) {
+		args[0] = msg.Prefix + args[0]
+	}
 	return args[0]
 }
 
