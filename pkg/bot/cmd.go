@@ -80,9 +80,9 @@ func getHelpEmbed(cmd stdcommands.WafferCommand) *discordgo.MessageEmbed {
 		**Category**: %s
 	`,
 		cmd.Description,
-		"`"+strings.Join(cmd.Aliases, " ")+"`",
+		strings.Join(cmd.Aliases, " "),
 		args,
-		"`"+cmd.Category+"`",
+		""+cmd.Category+"",
 	)
 
 	return &discordgo.MessageEmbed{
