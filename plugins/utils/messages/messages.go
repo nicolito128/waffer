@@ -85,6 +85,6 @@ func (msg *Message) SendChannelEmbed(embed *discordgo.MessageEmbed) (*discordgo.
 // HasHelPetition return a boolean if the message arguments ends with an "--help".
 func (msg *Message) HasHelpPetition() bool {
 	str := msg.GetPlainContent()
-	ok := strings.HasSuffix(str, "--help")
+	ok := strings.HasSuffix(str, "--help") || strings.HasSuffix(str, "-h")
 	return ok
 }
