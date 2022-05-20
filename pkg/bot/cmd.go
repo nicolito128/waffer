@@ -23,7 +23,7 @@ func canMessageCommand(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.Messa
 	if msg.HasHelpPetition() {
 		_, err := msg.SendChannelEmbed(getHelpEmbed(cmd))
 		if err != nil {
-			b.logger.Fatal(err.Error())
+			b.logs.Fatal(err.Error())
 		}
 		return false
 	}
@@ -41,7 +41,7 @@ func canMessageCommand(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.Messa
 	if cmd.DiscordPermissions > 0 {
 		botPerms, err := b.session.State.UserChannelPermissions(b.session.State.User.ID, m.ChannelID)
 		if err != nil {
-			b.logger.Fatal(err.Error())
+			b.logs.Fatal(err.Error())
 			return false
 		}
 
@@ -52,7 +52,7 @@ func canMessageCommand(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.Messa
 
 		perms, err := b.session.State.MessagePermissions(m.Message)
 		if err != nil {
-			b.logger.Fatal(err.Error())
+			b.logs.Fatal(err.Error())
 			return false
 		}
 

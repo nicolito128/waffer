@@ -1,6 +1,7 @@
 package bot
 
 import (
+	"log"
 	"os"
 	"os/signal"
 	"strings"
@@ -8,7 +9,6 @@ import (
 	"time"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/nicolito128/waffer/pkg/logger"
 	"github.com/nicolito128/waffer/plugins/utils/checks"
 	"github.com/nicolito128/waffer/plugins/utils/messages"
 	"github.com/nicolito128/waffer/stdcommands"
@@ -21,8 +21,8 @@ var mode = os.Getenv("BOT_MODE")
 // Bot
 // provide a basic application struct.
 type Bot struct {
-	session *discordgo.Session   // Bot session
-	logger  *logger.SystemLogger // Output information and errors
+	session *discordgo.Session // Bot session
+	logs    *log.Logger        // Output information and errors
 }
 
 // New returns a new bot session and an error.
@@ -33,9 +33,9 @@ func New() (*Bot, error) {
 	}
 
 	dg.Identify.Presence.Game.Name = prefix
-	logger := logger.New(dg)
+	logs := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
-	bot := &Bot{dg, logger}
+	bot := &Bot{dg, logs}
 	return bot, nil
 }
 
@@ -43,18 +43,18 @@ func New() (*Bot, error) {
 func (b *Bot) Run() {
 	err := b.session.Open()
 	if err != nil {
-		b.logger.Fatalf("error opening connection, %s", err)
+		b.logs.Fatalf("error opening connection, %s", err)
 	}
 
 	if mode == "debug" || mode == "" {
-		b.logger.Println("Running debug mode.")
+		b.logs.Println("Running debug mode.")
 		go b.setStatusLog()
 	}
 
 	stdcommands.AddCommands()
 	b.AddCommandsHandler()
 
-	b.logger.Println("Bot is now running.  Press CTRL-C to exit.")
+	b.logs.Println("Bot is now running.  Press CTRL-C to exit.")
 	sc := make(chan os.Signal, 1)
 
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
@@ -98,7 +98,7 @@ func (b *Bot) AddHandler(handler any) {
 func (b *Bot) setStatusLog() {
 	tdr := time.Tick(10 * time.Second)
 	for range tdr {
-		b.logger.Printf(`Presence: %s | Guilds: %d | Message count: %d | Private channels: %d `,
+		b.logs.Printf(`Presence: %s | Guilds: %d | Message count: %d | Private channels: %d `,
 			b.session.Identify.Presence.Game.Name,
 			len(b.session.State.Guilds),
 			len(b.session.State.PrivateChannels),
