@@ -10,10 +10,10 @@ import (
 var Command = &commands.WafferCommand{
 	Name:        "calculator",
 	Aliases:     []string{"calc"},
-	Description: "For mathematics.",
+	Description: "A mathematical calculation command. Use the example: `waf!calculator (10 / 2) + 1`, `waf!calculator 4f (1 / 9)`. The argument `<number>f` sets how many decimal places to display the result. By default the command displays the first two decimal digits, but it also accepts: `0f`, `1f`, `2f`, `3f`, `4f`, `5f`, `6f` and just `f` (for all decimal digits).",
 	Category:    "science",
 
-	Arguments:    []string{},
+	Arguments:    []string{"<number>f[optional]", "expression"},
 	RequiredArgs: 0,
 
 	DiscordPermissions: 0,
@@ -42,6 +42,8 @@ var Command = &commands.WafferCommand{
 		switch decimals {
 		case "0f":
 			msg.SendChannel("%s = %.0f", content, res)
+		case "1f":
+			msg.SendChannel("%s = %.1f", content, res)
 		case "3f":
 			msg.SendChannel("%s = %.3f", content, res)
 		case "4f":
