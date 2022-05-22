@@ -4,7 +4,7 @@ import (
 	"github.com/nicolito128/waffer/plugins/commands"
 )
 
-var inviteURL = "https://discord.gg/xYhavFzp"
+var inviteURL = "https://discord.gg/yWqmnE4UmG"
 
 var Command = &commands.WafferCommand{
 	Name:        "dev",
