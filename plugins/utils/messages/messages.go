@@ -72,9 +72,10 @@ func (msg *Message) GetPlainContent() string {
 }
 
 // SendChannel sends a message to the message author channel.
-func (msg *Message) SendChannel(str string, args ...any) {
+func (msg *Message) SendChannel(str string, args ...any) (*discordgo.Message, error) {
 	message := fmt.Sprintf(str, args...)
-	msg.Session.ChannelMessageSend(msg.MC.ChannelID, message)
+	m, err := msg.Session.ChannelMessageSend(msg.MC.ChannelID, message)
+	return m, err
 }
 
 // SendChannelEmbed sends a message embed to the message author channel.
