@@ -73,7 +73,7 @@ func messageMentionBot(s *discordgo.Session, m *discordgo.MessageCreate) {
 	if len(mentions) == 1 && m.Author.ID != s.State.User.ID {
 		for _, mention := range mentions {
 			if mention.ID == s.State.User.ID {
-				s.ChannelMessageSend(m.ChannelID, "Hello, I'm Waffer, a Discord bot made by @n128#5523. You can get more information about me with the command `"+prefix+"help`.")
+				s.ChannelMessageSend(m.ChannelID, "Hello, I'm Waffer, a Discord bot made by @n128#5523. You can get more information about me with the commands `"+prefix+"help` and `"+prefix+"dev`.")
 				return
 			}
 		}
