@@ -33,6 +33,7 @@ func New() (*Bot, error) {
 	}
 
 	dg.Identify.Presence.Game.Name = prefix
+	dg.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildMessages
 	logs := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
 	bot := &Bot{dg, logs}
@@ -51,6 +52,8 @@ func (b *Bot) Run() {
 		go b.setStatusLog()
 	}
 
+	b.AddHandler(messageMentionBot)
+
 	stdcommands.AddCommands()
 	b.AddCommandsHandler()
 
@@ -61,6 +64,20 @@ func (b *Bot) Run() {
 	<-sc
 
 	b.session.Close()
+}
+
+// This function will be called (due to AddHandler above) every time a new
+// guild is joined.
+func messageMentionBot(s *discordgo.Session, m *discordgo.MessageCreate) {
+	mentions := m.Mentions
+	if len(mentions) == 1 && m.Author.ID != s.State.User.ID {
+		for _, mention := range mentions {
+			if mention.ID == s.State.User.ID {
+				s.ChannelMessageSend(m.ChannelID, "Hello, I'm Waffer, a Discord bot made by @n128#5523. You can get more information about me with the command `"+prefix+"help`.")
+				return
+			}
+		}
+	}
 }
 
 // AddCommandsHandler is in charge of setting the primary function
