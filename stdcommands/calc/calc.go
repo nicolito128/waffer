@@ -14,7 +14,7 @@ var Command = &commands.WafferCommand{
 	Category:    "science",
 
 	Arguments:    []string{"<number>f[optional]", "expression"},
-	RequiredArgs: 0,
+	RequiredArgs: 1,
 
 	DiscordPermissions: 0,
 
