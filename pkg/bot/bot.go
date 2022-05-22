@@ -59,6 +59,8 @@ func (b *Bot) Run() {
 
 	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
 	<-sc
+
+	b.session.Close()
 }
 
 // AddCommandsHandler is in charge of setting the primary function
@@ -67,9 +69,9 @@ func (b *Bot) AddCommandsHandler() {
 	b.session.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) {
 		clist := stdcommands.GetCommandList()
 		msg := messages.New(s, m)
-
 		commandName := msg.GetCommand()
 		existsCommand := stdcommands.HasCommand(commandName)
+
 		if existsCommand && strings.HasPrefix(msg.Content, msg.GetCommandWithPrefix()) {
 			cmd := clist[commandName]
 
@@ -79,11 +81,13 @@ func (b *Bot) AddCommandsHandler() {
 				return
 			}
 
+			// If the command can be executed.
 			ok := canMessageCommand(cmd, b, m, msg)
 			if !ok {
 				return
 			}
 
+			// Execute the command in a new goroutine.
 			go cmd.GetTrigger(s, m, msg)
 		}
 	})
