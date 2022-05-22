@@ -2,7 +2,10 @@ module github.com/nicolito128/waffer
 
 go 1.18
 
-require github.com/bwmarrin/discordgo v0.24.0
+require (
+	github.com/bwmarrin/discordgo v0.24.0
+	github.com/nicolito128/go-calculator v0.0.0-20220522175010-557efc5c4cbd
+)
 
 require (
 	github.com/gorilla/websocket v1.4.2 // indirect
