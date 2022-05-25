@@ -3,7 +3,7 @@ module github.com/nicolito128/waffer
 go 1.18
 
 require (
-	github.com/bwmarrin/discordgo v0.24.0
+	github.com/bwmarrin/discordgo v0.25.0
 	github.com/nicolito128/go-calculator v0.0.0-20220525195428-749d6d876cd1
 )
 
