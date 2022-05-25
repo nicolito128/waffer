@@ -9,8 +9,7 @@ import (
 	"github.com/nicolito128/waffer/stdcommands"
 )
 
-func canMessageCommand(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.MessageCreate, msg *messages.Message) bool {
-	// DM check
+func canRunInDM(cmd stdcommands.WafferCommand, m *discordgo.MessageCreate, msg *messages.Message) bool {
 	if m.GuildID == "" {
 		// Command not allowed for dm channels
 		if !cmd.RunInDM {
@@ -19,7 +18,10 @@ func canMessageCommand(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.Messa
 		}
 	}
 
-	// Help pettion in the command
+	return true
+}
+
+func hasHelpPetition(cmd stdcommands.WafferCommand, b *Bot, msg *messages.Message) bool {
 	if msg.HasHelpPetition() {
 		_, err := msg.SendChannelEmbed(getHelpEmbed(cmd))
 		if err != nil {
@@ -28,7 +30,10 @@ func canMessageCommand(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.Messa
 		return false
 	}
 
-	// Arguments check
+	return true
+}
+
+func hasArgumentsForCommand(cmd stdcommands.WafferCommand, msg *messages.Message) bool {
 	if cmd.RequiredArgs > 0 {
 		args := msg.GetArguments()
 		if len(args) < cmd.RequiredArgs || (len(args) == 1 && args[0] == "") {
@@ -37,7 +42,10 @@ func canMessageCommand(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.Messa
 		}
 	}
 
-	// Permissions check
+	return true
+}
+
+func permissionsOk(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.MessageCreate, msg *messages.Message) bool {
 	if cmd.DiscordPermissions > 0 {
 		botPerms, err := b.session.State.UserChannelPermissions(b.session.State.User.ID, m.ChannelID)
 		if err != nil {
@@ -60,6 +68,34 @@ func canMessageCommand(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.Messa
 			msg.SendChannel("User permissions are too low.")
 			return false
 		}
+	}
+
+	return true
+}
+
+func canMessageCommand(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.MessageCreate, msg *messages.Message) bool {
+	// DM check
+	dm := canRunInDM(cmd, m, msg)
+	if !dm {
+		return false
+	}
+
+	// Help pettion in the command
+	helpPetition := hasHelpPetition(cmd, b, msg)
+	if !helpPetition {
+		return false
+	}
+
+	// Arguments check
+	argCheck := hasArgumentsForCommand(cmd, msg)
+	if !argCheck {
+		return false
+	}
+
+	// Permissions check
+	perms := permissionsOk(cmd, b, m, msg)
+	if !perms {
+		return false
 	}
 
 	return true
