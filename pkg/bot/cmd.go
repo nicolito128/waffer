@@ -31,7 +31,7 @@ func canMessageCommand(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.Messa
 	// Arguments check
 	if cmd.RequiredArgs > 0 {
 		args := msg.GetArguments()
-		if len(args) < cmd.RequiredArgs {
+		if len(args) < cmd.RequiredArgs && args[0] == "" {
 			msg.SendChannel("I need %d arguments for this command. Ask for help on this command using **%s --help**", cmd.RequiredArgs, msg.GetCommandWithPrefix())
 			return false
 		}
