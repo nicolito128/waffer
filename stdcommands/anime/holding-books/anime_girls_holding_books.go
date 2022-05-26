@@ -35,7 +35,7 @@ var aghpb DataJSON
 var Command = &commands.WafferCommand{
 	Name:        "girlholdingbook",
 	Aliases:     []string{"ghb", "girlbook", "animebook"},
-	Description: "Random anime girl holding a programming book.",
+	Description: "Random anime girl holding a programming book. Based repository: https://github.com/cat-milk/Anime-Girls-Holding-Programming-Books",
 	Category:    "fun",
 
 	Arguments:    []string{"mention[optional]"},
