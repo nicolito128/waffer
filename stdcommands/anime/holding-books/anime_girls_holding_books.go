@@ -1,5 +1,14 @@
 package holdingbooks
 
+/**
+ 	* This command uses the images provided in the "Anime-Girls-Holding-Programming-Books"
+ 	* repository by cat-milk. All rights of the images to their respective authors.
+	*
+	* The command does not contain, or plan to contain, any +18 (adult) character images.
+	*
+	* Github repository: https://github.com/cat-milk/Anime-Girls-Holding-Programming-Books
+*/
+
 import (
 	"encoding/json"
 	"math/rand"
