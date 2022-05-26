@@ -2,6 +2,7 @@ package stdcommands
 
 import (
 	"github.com/nicolito128/waffer/plugins/commands"
+	holdingbooks "github.com/nicolito128/waffer/stdcommands/anime/holding-books"
 	"github.com/nicolito128/waffer/stdcommands/avatar"
 	"github.com/nicolito128/waffer/stdcommands/calc"
 	"github.com/nicolito128/waffer/stdcommands/dev"
@@ -17,6 +18,7 @@ func AddCommands() {
 		dev.Command,
 		avatar.Command,
 		calc.Command,
+		holdingbooks.Command,
 	)
 }
 
