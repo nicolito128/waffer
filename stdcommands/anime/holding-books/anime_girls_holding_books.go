@@ -11,6 +11,7 @@ package holdingbooks
 
 import (
 	"encoding/json"
+	"fmt"
 	"math/rand"
 	"os"
 	"strings"
@@ -23,7 +24,7 @@ type DataJSON struct {
 	Go []string `json:"go"`
 }
 
-var languages = []string{"ai", "go"}
+var languages = []string{"ai", "go", "haskell", "smalltalk", "elixir", "c#"}
 var aghpb DataJSON
 
 var Command = &commands.WafferCommand{
@@ -56,7 +57,7 @@ var Command = &commands.WafferCommand{
 		} else {
 			link := getRandomLinkByLang(strings.ToLower(argument))
 			if link == "" {
-				msg.SendChannel("Languages not available.")
+				msg.SendChannel(fmt.Sprintf("Languages not available. Try one of this: `%s`", strings.Join(languages, " | ")))
 			} else {
 				msg.SendChannel(link)
 			}
