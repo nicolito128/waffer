@@ -6,6 +6,7 @@ import (
 	"github.com/nicolito128/waffer/stdcommands/avatar"
 	"github.com/nicolito128/waffer/stdcommands/calc"
 	"github.com/nicolito128/waffer/stdcommands/dev"
+	"github.com/nicolito128/waffer/stdcommands/github"
 	"github.com/nicolito128/waffer/stdcommands/ping"
 )
 
@@ -19,6 +20,7 @@ func AddCommands() {
 		avatar.Command,
 		calc.Command,
 		holdingbooks.Command,
+		github.Command,
 	)
 }
 
