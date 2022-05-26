@@ -43,7 +43,7 @@ var Command = &commands.WafferCommand{
 		}
 
 		im, err := animegirls.GetRandomImage(argument)
-		if err != nil || im == "" {
+		if err != nil {
 			msg.SendChannel("No images found for that language.")
 			return
 		}
