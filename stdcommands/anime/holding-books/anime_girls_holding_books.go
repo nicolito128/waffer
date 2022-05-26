@@ -20,11 +20,16 @@ import (
 )
 
 type DataJSON struct {
-	AI []string `json:"ai"`
-	Go []string `json:"go"`
+	AI        []string `json:"ai"`
+	Go        []string `json:"go"`
+	Ocaml     []string `json:"ocaml"`
+	Haskell   []string `json:"haskell"`
+	Smalltalk []string `json:"smalltalk"`
+	Elixir    []string `json:"elixir"`
+	CSharp    []string `json:"csharp"`
 }
 
-var languages = []string{"ai", "go", "haskell", "smalltalk", "elixir", "c#"}
+var languages = []string{"ai", "go", "ocaml", "haskell", "smalltalk", "elixir", "csharp"}
 var aghpb DataJSON
 
 var Command = &commands.WafferCommand{
@@ -73,6 +78,21 @@ func getRandomLinkByLang(lang string) string {
 	case "go":
 		rbIndex := rand.Intn(len(aghpb.Go))
 		return aghpb.Go[rbIndex]
+	case "ocaml":
+		rbIndex := rand.Intn(len(aghpb.Ocaml))
+		return aghpb.Ocaml[rbIndex]
+	case "haskell":
+		rbIndex := rand.Intn(len(aghpb.Haskell))
+		return aghpb.Haskell[rbIndex]
+	case "smalltalk":
+		rbIndex := rand.Intn(len(aghpb.Smalltalk))
+		return aghpb.Smalltalk[rbIndex]
+	case "elixir":
+		rbIndex := rand.Intn(len(aghpb.Elixir))
+		return aghpb.Elixir[rbIndex]
+	case "csharp", "c#":
+		rbIndex := rand.Intn(len(aghpb.CSharp))
+		return aghpb.CSharp[rbIndex]
 	default:
 		return ""
 	}
