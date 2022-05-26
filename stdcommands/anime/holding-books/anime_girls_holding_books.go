@@ -20,7 +20,7 @@ import (
 
 var Command = &commands.WafferCommand{
 	Name:        "girlholdingbook",
-	Aliases:     []string{"ghb", "girlbook", "animebook"},
+	Aliases:     []string{"ghb", "girlbook", "animebook", "girlprogrambook"},
 	Description: "Random anime girl holding a programming book. Based repository: https://github.com/cat-milk/Anime-Girls-Holding-Programming-Books",
 	Category:    "fun",
 
