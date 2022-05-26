@@ -1,6 +1,7 @@
 package holdingbooks
 
 import (
+	"fmt"
 	"math/rand"
 	"strings"
 
@@ -40,11 +41,13 @@ var Command = &commands.WafferCommand{
 
 			im, _ := animegirls.GetRandomImage(rbLang)
 			msg.SendChannel(im)
+			return
 		}
 
 		im, err := animegirls.GetRandomImage(argument)
-		if err != nil || im == "" {
+		if err != nil && im == "" {
 			msg.SendChannel("No images found for that language.")
+			msg.SendChannel(fmt.Sprintf("Try one of these languages: `%s`", strings.Join(animegirls.Languages, ", ")))
 			return
 		}
 
