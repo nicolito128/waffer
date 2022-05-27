@@ -5,6 +5,7 @@ import (
 	"math/rand"
 	"strings"
 
+	"github.com/bwmarrin/discordgo"
 	animegirls "github.com/nicolito128/animegirls-holding-programming-books"
 	"github.com/nicolito128/waffer/plugins/commands"
 )
@@ -44,7 +45,12 @@ var Command = &commands.WafferCommand{
 				msg.SendChannel("Error: ", err.Error())
 			}
 
-			msg.SendChannel(im)
+			msg.SendChannelEmbed(&discordgo.MessageEmbed{
+				URL: im,
+				Image: &discordgo.MessageEmbedImage{
+					URL: im,
+				},
+			})
 			return
 		}
 
@@ -55,6 +61,11 @@ var Command = &commands.WafferCommand{
 			return
 		}
 
-		msg.SendChannel(im)
+		msg.SendChannelEmbed(&discordgo.MessageEmbed{
+			URL: im,
+			Image: &discordgo.MessageEmbedImage{
+				URL: im,
+			},
+		})
 	},
 }
