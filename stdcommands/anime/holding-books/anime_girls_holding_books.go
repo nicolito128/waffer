@@ -28,7 +28,7 @@ var Command = &commands.WafferCommand{
 	Arguments:    []string{"mention[optional]"},
 	RequiredArgs: 0,
 
-	DiscordPermissions: 0,
+	DiscordPermissions: discordgo.PermissionSendMessages,
 
 	RunInDM: false,
 

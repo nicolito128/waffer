@@ -3,6 +3,7 @@ package calc
 import (
 	"strings"
 
+	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/go-calculator"
 	"github.com/nicolito128/waffer/plugins/commands"
 )
@@ -16,7 +17,7 @@ var Command = &commands.WafferCommand{
 	Arguments:    []string{"<number>f[optional]", "expression"},
 	RequiredArgs: 1,
 
-	DiscordPermissions: 0,
+	DiscordPermissions: discordgo.PermissionSendMessages,
 
 	RunInDM: true,
 

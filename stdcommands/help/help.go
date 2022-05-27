@@ -4,6 +4,7 @@ import (
 	"os"
 	"strings"
 
+	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/plugins/commands"
 )
 
@@ -18,7 +19,7 @@ var Command = &commands.WafferCommand{
 	Arguments:    []string{"<command>[optional]"},
 	RequiredArgs: 0,
 
-	DiscordPermissions: 0,
+	DiscordPermissions: discordgo.PermissionSendMessages,
 
 	RunInDM: true,
 

@@ -1,6 +1,7 @@
 package dev
 
 import (
+	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/plugins/commands"
 )
 
@@ -15,7 +16,7 @@ var Command = &commands.WafferCommand{
 	Arguments:    []string{},
 	RequiredArgs: 0,
 
-	DiscordPermissions: 0,
+	DiscordPermissions: discordgo.PermissionSendMessages,
 
 	RunInDM: true,
 

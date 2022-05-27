@@ -4,6 +4,7 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/plugins/commands"
 	"github.com/nicolito128/waffer/plugins/utils/messages"
+	"github.com/nicolito128/waffer/plugins/utils/permissions"
 	"github.com/nicolito128/waffer/stdcommands"
 )
 
@@ -43,34 +44,6 @@ func hasArgumentsForCommand(cmd stdcommands.WafferCommand, msg *messages.Message
 	return true
 }
 
-func permissionsOk(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.MessageCreate, msg *messages.Message) bool {
-	if cmd.DiscordPermissions > 0 {
-		botPerms, err := b.session.State.UserChannelPermissions(b.session.State.User.ID, m.ChannelID)
-		if err != nil {
-			b.logs.Fatal(err.Error())
-			return false
-		}
-
-		if (botPerms & cmd.DiscordPermissions) < cmd.DiscordPermissions {
-			msg.SendChannel("Bot permissions are too low.")
-			return false
-		}
-
-		perms, err := b.session.State.MessagePermissions(m.Message)
-		if err != nil {
-			b.logs.Fatal(err.Error())
-			return false
-		}
-
-		if (perms & cmd.DiscordPermissions) < cmd.DiscordPermissions {
-			msg.SendChannel("User permissions are too low.")
-			return false
-		}
-	}
-
-	return true
-}
-
 func canMessageCommand(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.MessageCreate, msg *messages.Message) bool {
 	// DM check
 	dm := canRunInDM(cmd, m, msg)
@@ -91,8 +64,14 @@ func canMessageCommand(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.Messa
 	}
 
 	// Permissions check
-	perms := permissionsOk(cmd, b, m, msg)
+	perms, err := permissions.MemberHasPermission(b.session, m.GuildID, m.Author.ID, cmd.DiscordPermissions)
+	if err != nil {
+		b.logs.Println(err.Error())
+		return false
+	}
+
 	if !perms {
+		msg.SendChannel("You don't have the permissions to use this command.")
 		return false
 	}
 
