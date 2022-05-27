@@ -1,6 +1,9 @@
 package commands
 
 import (
+	"fmt"
+	"strings"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/plugins/utils/messages"
 )
@@ -50,4 +53,31 @@ func (wc *WafferCommand) Args() ([]string, int) {
 // GetTrigger execute the current WafferCommand.RunFunc
 func (wc *WafferCommand) GetTrigger(s *discordgo.Session, m *discordgo.MessageCreate, msg *messages.Message) {
 	wc.RunFunc(&HandlerData{S: s, MC: m, Message: msg})
+}
+
+// GetHelpEmbed returns a discordgo.MessageEmbed with the help information of the command.
+func GetHelpEmbed(cmd *WafferCommand) *discordgo.MessageEmbed {
+	var args string
+	if len(cmd.Arguments) == 0 {
+		args = ""
+	} else {
+		args = "`" + strings.Join(cmd.Arguments, " ") + "`"
+	}
+
+	desc := fmt.Sprintf(`
+		**Description**: %s
+		**Aliases**: %s
+		**Arguments**: %s
+		**Category**: %s
+	`,
+		cmd.Description,
+		strings.Join(cmd.Aliases, " "),
+		args,
+		""+cmd.Category+"",
+	)
+
+	return &discordgo.MessageEmbed{
+		Title:       cmd.Name,
+		Description: desc,
+	}
 }
