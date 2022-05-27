@@ -39,7 +39,11 @@ var Command = &commands.WafferCommand{
 			rbIndex := rand.Intn(len(animegirls.Languages))
 			rbLang := animegirls.Languages[rbIndex]
 
-			im, _ := animegirls.GetRandomImage(rbLang)
+			im, err := animegirls.GetRandomImage(rbLang)
+			if err != nil {
+				msg.SendChannel("Error: ", err.Error())
+			}
+
 			msg.SendChannel(im)
 			return
 		}
