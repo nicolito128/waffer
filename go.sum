@@ -13,6 +13,8 @@ github.com/nicolito128/animegirls-holding-programming-books v1.1.3 h1:mqHkLbNhEk
 github.com/nicolito128/animegirls-holding-programming-books v1.1.3/go.mod h1:9UuyHR3xDHUrkoUEUHdlSxf7r2S9dSXN5eEPOFrYXQg=
 github.com/nicolito128/animegirls-holding-programming-books v1.1.4 h1:VvyGRImXdN/l1MZrRMzmP0RhZBxTXYyLNGa011+HDwE=
 github.com/nicolito128/animegirls-holding-programming-books v1.1.4/go.mod h1:9UuyHR3xDHUrkoUEUHdlSxf7r2S9dSXN5eEPOFrYXQg=
+github.com/nicolito128/animegirls-holding-programming-books v1.1.5 h1:Blb4USPqZdrwGIK/svLuagZgQOc5l71cAv8+zywdG6g=
+github.com/nicolito128/animegirls-holding-programming-books v1.1.5/go.mod h1:9UuyHR3xDHUrkoUEUHdlSxf7r2S9dSXN5eEPOFrYXQg=
 github.com/nicolito128/go-calculator v1.0.0 h1:SQLtd5V2SeGL29J2QzkdPU0dOGgrGGA+zmkLZZeocxY=
 github.com/nicolito128/go-calculator v1.0.0/go.mod h1:VBtd1aqPxpExLteM6DRp3/ThCrGixTnCHKOXoSzKPXM=
 golang.org/x/crypto v0.0.0-20210421170649-83a5a9bb288b/go.mod h1:T9bdIzuCu7OtxOm1hfPfRQxPLYneinmdGuTeoZ9dtd4=
