@@ -5,9 +5,9 @@ import "github.com/nicolito128/waffer/plugins/commands"
 var repository = "https://github.com/nicolito128/waffer"
 
 var Command = &commands.WafferCommand{
-	Name:        "dev",
-	Aliases:     []string{"devserver"},
-	Description: "Dev return the development bot server.",
+	Name:        "github",
+	Aliases:     []string{"repository"},
+	Description: "Code repository.",
 	Category:    "development",
 
 	Arguments:    []string{},
