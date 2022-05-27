@@ -42,7 +42,7 @@ var Command = &commands.WafferCommand{
 
 			im, err := animegirls.GetRandomImage(rbLang)
 			if err != nil {
-				msg.SendChannel("Error: ", err.Error())
+				msg.SendChannel("Error: %s", err.Error())
 			}
 
 			msg.SendChannelEmbed(&discordgo.MessageEmbed{
