@@ -7,7 +7,7 @@ A discord bot written in Go.
 <img align="right" alt="Waffer logo" src="https://i.imgur.com/guq55Wb_d.png" width="150">
 
 ## Deploy
-Clone de repository:
+Clone the repository:
 
     git clone https://github.com/nicolito128/waffer
 
