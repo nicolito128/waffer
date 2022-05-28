@@ -24,7 +24,6 @@ func hasArgumentsForCommand(cmd stdcommands.WafferCommand, msg *messages.Message
 	if cmd.RequiredArgs > 0 {
 		args := msg.GetArguments()
 		if len(args) < cmd.RequiredArgs || (len(args) == 1 && args[0] == "") {
-			msg.SendChannel("I need %d arguments for this command. Ask for help at this command using **%s --help**", cmd.RequiredArgs, msg.GetCommandWithPrefix())
 			return false
 		}
 	}
@@ -58,6 +57,7 @@ func canMessageCommand(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.Messa
 	// Arguments check
 	argCheck := hasArgumentsForCommand(cmd, msg)
 	if !argCheck {
+		msg.SendChannel("I need %d arguments for this command. Ask for help at this command using `%s --help`", cmd.RequiredArgs, msg.GetCommandWithPrefix())
 		return false
 	}
 
