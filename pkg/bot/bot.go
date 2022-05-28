@@ -10,6 +10,7 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/plugins/utils/checks"
+	"github.com/nicolito128/waffer/plugins/utils/message_creation"
 	"github.com/nicolito128/waffer/plugins/utils/messages"
 	"github.com/nicolito128/waffer/stdcommands"
 )
@@ -66,20 +67,6 @@ func (b *Bot) Run() {
 	b.session.Close()
 }
 
-// This function will be called (due to AddHandler above) every time a new
-// guild is joined.
-func messageMentionBot(s *discordgo.Session, m *discordgo.MessageCreate) {
-	mentions := m.Mentions
-	if len(mentions) == 1 && m.Author.ID != s.State.User.ID {
-		for _, mention := range mentions {
-			if mention.ID == s.State.User.ID {
-				s.ChannelMessageSend(m.ChannelID, "Hello, I'm Waffer, a Discord bot made by @n128#5523. You can get more information about me with the commands `"+prefix+"help` and `"+prefix+"dev`.")
-				return
-			}
-		}
-	}
-}
-
 // AddCommandsHandler is in charge of setting the primary function
 // that will check when users on any server try to use a command.
 func (b *Bot) AddCommandsHandler() {
@@ -99,7 +86,7 @@ func (b *Bot) AddCommandsHandler() {
 			}
 
 			// If the command can be executed.
-			ok := canMessageCommand(cmd, b, m, msg)
+			ok := message_creation.UserCanRunCommand(cmd, s, m, msg)
 			if !ok {
 				return
 			}
@@ -124,5 +111,18 @@ func (b *Bot) setStatusLog() {
 			len(b.session.State.Guilds),
 			len(b.session.State.PrivateChannels),
 			b.session.State.MaxMessageCount)
+	}
+}
+
+// Every time someone mention the bot, this function will be called.
+func messageMentionBot(s *discordgo.Session, m *discordgo.MessageCreate) {
+	mentions := m.Mentions
+	if len(mentions) == 1 && m.Author.ID != s.State.User.ID {
+		for _, mention := range mentions {
+			if mention.ID == s.State.User.ID {
+				s.ChannelMessageSend(m.ChannelID, "Hello, I'm Waffer, a Discord bot made by @n128#5523. You can get more information about me with the commands `"+prefix+"help` and `"+prefix+"dev`.")
+				return
+			}
+		}
 	}
 }
