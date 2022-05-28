@@ -1,6 +1,8 @@
 package message_creation
 
 import (
+	"fmt"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/plugins/commands"
 	"github.com/nicolito128/waffer/plugins/utils/messages"
@@ -20,6 +22,7 @@ func MessageHasHelpPetition(cmd stdcommands.WafferCommand, msg *messages.Message
 func MessageHasRequiredArguments(cmd stdcommands.WafferCommand, msg *messages.Message) bool {
 	if cmd.RequiredArgs > 0 {
 		args := msg.GetArguments()
+		fmt.Println(len(args))
 		if len(args) < cmd.RequiredArgs || (len(args) == 1 && args[0] == "") {
 			return false
 		}
