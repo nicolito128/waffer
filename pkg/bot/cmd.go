@@ -8,18 +8,6 @@ import (
 	"github.com/nicolito128/waffer/stdcommands"
 )
 
-func canRunInDM(cmd stdcommands.WafferCommand, m *discordgo.MessageCreate, msg *messages.Message) bool {
-	if m.GuildID == "" {
-		// Command not allowed for dm channels
-		if !cmd.RunInDM {
-			msg.SendChannel("I can't use this command in direct messages.")
-			return false
-		}
-	}
-
-	return true
-}
-
 func hasHelpPetition(cmd stdcommands.WafferCommand, b *Bot, msg *messages.Message) bool {
 	if msg.HasHelpPetition() {
 		_, err := msg.SendChannelEmbed(commands.GetHelpEmbed(cmd))
@@ -46,9 +34,19 @@ func hasArgumentsForCommand(cmd stdcommands.WafferCommand, msg *messages.Message
 
 func canMessageCommand(cmd stdcommands.WafferCommand, b *Bot, m *discordgo.MessageCreate, msg *messages.Message) bool {
 	// DM check
-	dm := canRunInDM(cmd, m, msg)
-	if !dm {
+	dm, err := permissions.ComesFromDM(b.session, m)
+	if err != nil {
+		b.logs.Fatal(err.Error())
 		return false
+	}
+
+	if dm {
+		if cmd.RunInDM {
+			return true
+		} else {
+			msg.SendChannel("This command can't be used in DM.")
+			return false
+		}
 	}
 
 	// Help pettion in the command

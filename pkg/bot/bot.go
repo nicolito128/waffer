@@ -33,7 +33,7 @@ func New() (*Bot, error) {
 	}
 
 	dg.Identify.Presence.Game.Name = prefix
-	dg.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildMessages
+	dg.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildMessages | discordgo.IntentDirectMessageTyping | discordgo.IntentDirectMessages
 	logs := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
 	bot := &Bot{dg, logs}
