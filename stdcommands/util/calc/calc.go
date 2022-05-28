@@ -12,7 +12,7 @@ var Command = &commands.WafferCommand{
 	Name:        "calculator",
 	Aliases:     []string{"calc"},
 	Description: "A mathematical calculation command. Use the example: `waf!calculator (10 / 2) + 1`, `waf!calculator 4f (1 / 9)`. The argument `<number>f` sets how many decimal places to display the result. By default the command displays the first two decimal digits, but it also accepts: `0f`, `1f`, `2f`, `3f`, `4f`, `5f`, `6f` and just `f` (for all decimal digits).",
-	Category:    "science",
+	Category:    "util",
 
 	Arguments:    []string{"<number>f[optional]", "expression"},
 	RequiredArgs: 1,

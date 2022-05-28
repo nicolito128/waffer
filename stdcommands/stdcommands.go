@@ -3,12 +3,12 @@ package stdcommands
 import (
 	"github.com/nicolito128/waffer/plugins/commands"
 	holdingbooks "github.com/nicolito128/waffer/stdcommands/anime/holding-books"
-	"github.com/nicolito128/waffer/stdcommands/avatar"
-	"github.com/nicolito128/waffer/stdcommands/calc"
-	"github.com/nicolito128/waffer/stdcommands/dev"
-	"github.com/nicolito128/waffer/stdcommands/github"
-	"github.com/nicolito128/waffer/stdcommands/help"
-	"github.com/nicolito128/waffer/stdcommands/ping"
+	"github.com/nicolito128/waffer/stdcommands/development/dev"
+	"github.com/nicolito128/waffer/stdcommands/development/github"
+	"github.com/nicolito128/waffer/stdcommands/development/ping"
+	"github.com/nicolito128/waffer/stdcommands/info/avatar"
+	"github.com/nicolito128/waffer/stdcommands/info/help"
+	"github.com/nicolito128/waffer/stdcommands/util/calc"
 )
 
 type WafferCommand *commands.WafferCommand

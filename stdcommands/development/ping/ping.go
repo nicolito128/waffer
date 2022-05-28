@@ -9,7 +9,7 @@ var Command = &commands.WafferCommand{
 	Name:        "ping",
 	Aliases:     []string{"pong"},
 	Description: "Ping sends the current bot latency in milliseconds.",
-	Category:    "info",
+	Category:    "development",
 
 	Arguments:    []string{},
 	RequiredArgs: 0,
