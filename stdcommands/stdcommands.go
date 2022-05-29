@@ -9,6 +9,7 @@ import (
 	"github.com/nicolito128/waffer/stdcommands/info/avatar"
 	"github.com/nicolito128/waffer/stdcommands/info/help"
 	"github.com/nicolito128/waffer/stdcommands/util/calc"
+	"github.com/nicolito128/waffer/stdcommands/util/say"
 )
 
 type WafferCommand *commands.WafferCommand
@@ -23,6 +24,7 @@ func AddCommands() {
 		holdingbooks.Command,
 		github.Command,
 		help.Command,
+		say.Command,
 	)
 }
 
