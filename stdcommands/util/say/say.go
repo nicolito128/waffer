@@ -13,7 +13,7 @@ var Command = &commands.WafferCommand{
 	Description: "Make the bot say something.",
 	Category:    "util",
 
-	Arguments:    []string{">content>"},
+	Arguments:    []string{"<content>"},
 	RequiredArgs: 1,
 
 	DiscordPermissions: discordgo.PermissionSendMessages,
