@@ -80,6 +80,10 @@ func (msg *Message) SendChannel(str string, args ...any) (*discordgo.Message, er
 
 // SendChannelEmbed sends a message embed to the message author channel.
 func (msg *Message) SendChannelEmbed(embed *discordgo.MessageEmbed) (*discordgo.Message, error) {
+	if msg.MC.GuildID != "" && embed.Color == 0 {
+		embed.Color = msg.Session.State.MessageColor(msg.MC.Message)
+	}
+
 	return msg.Session.ChannelMessageSendEmbed(msg.MC.ChannelID, embed)
 }
 

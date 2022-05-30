@@ -36,7 +36,6 @@ var Command = &commands.WafferCommand{
 		msg.SendChannelEmbed(&discordgo.MessageEmbed{
 			Title: user.Username + "'s avatar",
 			URL:   avatarURL,
-			Color: user.AccentColor,
 			Image: &discordgo.MessageEmbedImage{
 				URL:    avatarURL,
 				Width:  500,
