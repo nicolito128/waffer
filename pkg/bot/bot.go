@@ -117,7 +117,7 @@ func (b *Bot) setStatusLog() {
 // Every time someone mention the bot, this function will be called.
 func messageMentionBot(s *discordgo.Session, m *discordgo.MessageCreate) {
 	mentions := m.Mentions
-	if len(mentions) == 1 && m.Author.ID != s.State.User.ID {
+	if len(mentions) == 1 && m.Author.ID != s.State.User.ID && m.MessageReference == nil {
 		for _, mention := range mentions {
 			if mention.ID == s.State.User.ID {
 				s.ChannelMessageSend(m.ChannelID, "Hello, I'm Waffer, a Discord bot made by @n128#5523. You can get more information about me with the commands `"+prefix+"help` and `"+prefix+"dev`.")
