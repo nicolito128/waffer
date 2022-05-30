@@ -29,6 +29,8 @@ type WafferCommand struct {
 
 	RunInDM bool // If the command can run in direct messages or not.
 
+	OwnerOnly bool // If the command can only be used by the owner of the bot.
+
 	DiscordPermissions int64 // Permissions required for the user and bot.
 
 	RunFunc RunHandler // Run function

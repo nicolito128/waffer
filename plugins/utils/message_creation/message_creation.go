@@ -2,6 +2,7 @@ package message_creation
 
 import (
 	"fmt"
+	"os"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/plugins/commands"
@@ -9,6 +10,8 @@ import (
 	"github.com/nicolito128/waffer/plugins/utils/permissions"
 	"github.com/nicolito128/waffer/stdcommands"
 )
+
+var ownerID = os.Getenv("OWNER_ID")
 
 func MessageHasHelpPetition(cmd stdcommands.WafferCommand, msg *messages.Message) bool {
 	if msg.HasHelpPetition() {
@@ -32,6 +35,15 @@ func MessageHasRequiredArguments(cmd stdcommands.WafferCommand, msg *messages.Me
 }
 
 func UserCanRunCommand(cmd stdcommands.WafferCommand, s *discordgo.Session, m *discordgo.MessageCreate, msg *messages.Message) bool {
+	if cmd.OwnerOnly {
+		if m.Author.ID != ownerID {
+			msg.SendChannel("You don't have permission to use this command.")
+			return false
+		}
+
+		return true
+	}
+
 	// DM check
 	dm, err := permissions.ComesFromDM(s, m)
 	if err != nil {

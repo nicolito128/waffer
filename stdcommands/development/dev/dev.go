@@ -16,6 +16,7 @@ var Command = &commands.WafferCommand{
 	Arguments:    []string{},
 	RequiredArgs: 0,
 
+	OwnerOnly:          false,
 	DiscordPermissions: discordgo.PermissionSendMessages,
 
 	RunInDM: true,
