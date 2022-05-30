@@ -36,6 +36,10 @@ var Command = &commands.WafferCommand{
 		msg.SendChannelEmbed(&discordgo.MessageEmbed{
 			Title: user.Username + "'s avatar",
 			URL:   avatarURL,
+			Author: &discordgo.MessageEmbedAuthor{
+				Name:    user.Username,
+				IconURL: avatarURL,
+			},
 			Image: &discordgo.MessageEmbedImage{
 				URL:    avatarURL,
 				Width:  500,
