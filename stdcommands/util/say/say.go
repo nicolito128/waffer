@@ -18,7 +18,7 @@ var Command = &commands.WafferCommand{
 
 	DiscordPermissions: discordgo.PermissionSendMessages,
 
-	RunInDM: true,
+	RunInDM: false,
 
 	RunFunc: func(data *commands.HandlerData) {
 		msg := data.Message
