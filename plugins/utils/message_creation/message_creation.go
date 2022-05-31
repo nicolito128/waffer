@@ -14,8 +14,7 @@ import (
 var ownerID = os.Getenv("OWNER_ID")
 
 func MessageHasHelpPetition(cmd stdcommands.WafferCommand, msg *messages.Message) bool {
-	if msg.HasHelpPetition() {
-		msg.SendChannelEmbed(commands.GetHelpEmbed(cmd))
+	if !msg.HasHelpPetition() {
 		return false
 	}
 
@@ -44,6 +43,13 @@ func UserCanRunCommand(cmd stdcommands.WafferCommand, s *discordgo.Session, m *d
 		return true
 	}
 
+	// Help pettion in the command
+	helpPetition := MessageHasHelpPetition(cmd, msg)
+	if helpPetition {
+		msg.SendChannelEmbed(commands.GetHelpEmbed(cmd))
+		return false
+	}
+
 	// DM check
 	dm, err := permissions.ComesFromDM(s, m)
 	if err != nil {
@@ -59,19 +65,6 @@ func UserCanRunCommand(cmd stdcommands.WafferCommand, s *discordgo.Session, m *d
 		}
 	}
 
-	// Help pettion in the command
-	helpPetition := MessageHasHelpPetition(cmd, msg)
-	if !helpPetition {
-		return false
-	}
-
-	// Arguments check
-	argCheck := MessageHasRequiredArguments(cmd, msg)
-	if !argCheck {
-		msg.SendChannel("I need %d arguments for this command. Ask for help at this command using `%s --help`", cmd.RequiredArgs, msg.GetCommandWithPrefix())
-		return false
-	}
-
 	// Permissions check
 	perms, err := permissions.MemberHasPermission(s, m.GuildID, m.Author.ID, cmd.DiscordPermissions)
 	if err != nil {
@@ -80,6 +73,13 @@ func UserCanRunCommand(cmd stdcommands.WafferCommand, s *discordgo.Session, m *d
 
 	if !perms {
 		msg.SendChannel("You don't have the permissions to use this command.")
+		return false
+	}
+
+	// Arguments check
+	argCheck := MessageHasRequiredArguments(cmd, msg)
+	if !argCheck {
+		msg.SendChannel("I need %d arguments for this command. Ask for help at this command using `%s --help`", cmd.RequiredArgs, msg.GetCommandWithPrefix())
 		return false
 	}
 
