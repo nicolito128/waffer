@@ -117,6 +117,10 @@ func (b *Bot) setStatusLog() {
 // Every time someone mention the bot, this function will be called.
 func messageMentionBot(s *discordgo.Session, m *discordgo.MessageCreate) {
 	mentions := m.Mentions
+	if s.State.User.Bot {
+		return
+	}
+
 	if len(mentions) == 1 && m.Author.ID != s.State.User.ID && m.MessageReference == nil {
 		for _, mention := range mentions {
 			if mention.ID == s.State.User.ID {
