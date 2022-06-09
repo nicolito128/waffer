@@ -3,24 +3,14 @@ package permissions
 import "github.com/bwmarrin/discordgo"
 
 // MemberHasPermission checks if a member has the given permission
-func MemberHasPermission(s *discordgo.Session, guildID string, userID string, permission int64) (bool, error) {
-	member, err := s.State.Member(guildID, userID)
+func MemberHasPermission(s *discordgo.Session, channelID string, userID string, permission int64) (bool, error) {
+	p, err := s.UserChannelPermissions(userID, channelID)
 	if err != nil {
-		if member, err = s.GuildMember(guildID, userID); err != nil {
-			return false, err
-		}
+		return false, err
 	}
 
-	// Iterate through the role IDs stored in member.Roles
-	// to check permissions
-	for _, roleID := range member.Roles {
-		role, err := s.State.Role(guildID, roleID)
-		if err != nil {
-			return false, err
-		}
-		if role.Permissions&permission != 0 {
-			return true, nil
-		}
+	if p&permission == permission {
+		return true, nil
 	}
 
 	return false, nil

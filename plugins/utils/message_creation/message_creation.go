@@ -64,7 +64,7 @@ func UserCanRunCommand(cmd stdcommands.WafferCommand, s *discordgo.Session, m *d
 	}
 
 	// Permissions check
-	perms, err := permissions.MemberHasPermission(s, m.GuildID, m.Author.ID, cmd.DiscordPermissions)
+	perms, err := permissions.MemberHasPermission(s, m.ChannelID, m.Author.ID, cmd.DiscordPermissions)
 	if err != nil {
 		return false
 	}
