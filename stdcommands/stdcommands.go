@@ -9,6 +9,7 @@ import (
 	"github.com/nicolito128/waffer/stdcommands/fun/dog"
 	"github.com/nicolito128/waffer/stdcommands/info/avatar"
 	"github.com/nicolito128/waffer/stdcommands/info/help"
+	"github.com/nicolito128/waffer/stdcommands/info/invite"
 	"github.com/nicolito128/waffer/stdcommands/util/calc"
 	"github.com/nicolito128/waffer/stdcommands/util/say"
 )
@@ -27,6 +28,7 @@ func AddCommands() {
 		help.Command,
 		say.Command,
 		dog.Command,
+		invite.Command,
 	)
 }
 
