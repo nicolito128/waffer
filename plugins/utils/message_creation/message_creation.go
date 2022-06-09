@@ -1,7 +1,6 @@
 package message_creation
 
 import (
-	"fmt"
 	"os"
 
 	"github.com/bwmarrin/discordgo"
@@ -24,7 +23,6 @@ func MessageHasHelpPetition(cmd stdcommands.WafferCommand, msg *messages.Message
 func MessageHasRequiredArguments(cmd stdcommands.WafferCommand, msg *messages.Message) bool {
 	if cmd.RequiredArgs > 0 {
 		args := msg.GetArguments()
-		fmt.Println(len(args))
 		if len(args) < cmd.RequiredArgs || (len(args) == 1 && args[0] == "") {
 			return false
 		}
