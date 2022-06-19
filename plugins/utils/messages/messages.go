@@ -17,6 +17,10 @@ import (
 )
 
 func getPrefix() string {
+	if os.Getenv("BOT_MODE") == "production" {
+		return os.Getenv("BOT_PREFIX")
+	}
+
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatal("Error loading .env file")

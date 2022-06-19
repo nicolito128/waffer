@@ -17,6 +17,10 @@ import (
 )
 
 func loadENV() (string, string, string) {
+	if os.Getenv("BOT_MODE") == "production" {
+		return os.Getenv("BOT_TOKEN"), os.Getenv("BOT_PREFIX"), os.Getenv("BOT_MODE")
+	}
+
 	err := godotenv.Load(".env")
 	if err != nil {
 		log.Fatal("Error loading .env file")
