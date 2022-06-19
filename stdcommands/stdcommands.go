@@ -9,6 +9,7 @@ import (
 	"github.com/nicolito128/waffer/stdcommands/fun/dog"
 	"github.com/nicolito128/waffer/stdcommands/fun/rps"
 	"github.com/nicolito128/waffer/stdcommands/info/avatar"
+	"github.com/nicolito128/waffer/stdcommands/info/commandlist"
 	"github.com/nicolito128/waffer/stdcommands/info/help"
 	"github.com/nicolito128/waffer/stdcommands/info/invite"
 	"github.com/nicolito128/waffer/stdcommands/util/calc"
@@ -31,6 +32,7 @@ func AddCommands() {
 		dog.Command,
 		invite.Command,
 		rps.Command,
+		commandlist.Command,
 	)
 }
 
