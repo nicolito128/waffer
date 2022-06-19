@@ -26,14 +26,14 @@ var Command = &commands.WafferCommand{
 		argument := strings.Join(msg.GetArguments(), " ")
 
 		if argument == "" || argument == " " {
-			msg.SendChannel("You can enter the name of a command to get more information about it. Ex: `%shelp ping`.", msg.Prefix)
-			msg.SendChannel("You also have the option of entering **-h** or **--help** at the end of any command to get the information box. Ex: `%scalc -h` or `%sping --help`.", msg.Prefix, msg.Prefix)
+			msg.SendChannelSafe("You can enter the name of a command to get more information about it. Ex: `%shelp ping`.", msg.Prefix)
+			msg.SendChannelSafe("You also have the option of entering **-h** or **--help** at the end of any command to get the information box. Ex: `%scalc -h` or `%sping --help`.", msg.Prefix, msg.Prefix)
 			return
 		}
 
 		clist := commands.CommandList
 		if clist[argument] == nil {
-			msg.SendChannel("Command **%s** not found.", argument)
+			msg.SendChannelSafe("Command **%s** not found.", argument)
 			return
 		}
 
