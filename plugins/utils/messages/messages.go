@@ -93,6 +93,7 @@ func (msg *Message) SendChannel(str string, args ...any) (*discordgo.Message, er
 	return m, err
 }
 
+// SendChannelSafe sends a message to the message author channel without mentions allowed.
 func (msg *Message) SendChannelSafe(str string, args ...any) (*discordgo.Message, error) {
 	message := fmt.Sprintf(str, args...)
 	m, err := msg.Session.ChannelMessageSendComplex(msg.MC.ChannelID, &discordgo.MessageSend{
