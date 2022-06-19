@@ -4,6 +4,7 @@ go 1.18
 
 require (
 	github.com/bwmarrin/discordgo v0.25.0
+	github.com/joho/godotenv v1.4.0
 	github.com/nicolito128/animegirls-holding-programming-books v1.1.6
 	github.com/nicolito128/go-calculator v1.1.0
 )
