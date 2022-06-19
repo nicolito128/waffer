@@ -30,13 +30,7 @@ var Command = &commands.WafferCommand{
 			return
 		}
 
-		mentions := len(data.MC.MentionRoles)
-		if data.MC.MentionEveryone || (mentions > 0) {
-			msg.SendChannel("You can't mention everyone or roles in a say command.")
-			return
-		}
-
 		data.S.ChannelMessageDelete(data.MC.ChannelID, data.MC.ID)
-		msg.SendChannel(content)
+		msg.SendChannelSafe(content)
 	},
 }
