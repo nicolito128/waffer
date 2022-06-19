@@ -96,9 +96,9 @@ func (msg *Message) SendChannel(str string, args ...any) (*discordgo.Message, er
 func (msg *Message) SendChannelSafe(str string, args ...any) (*discordgo.Message, error) {
 	message := fmt.Sprintf(str, args...)
 	m, err := msg.Session.ChannelMessageSendComplex(msg.MC.ChannelID, &discordgo.MessageSend{
-		Content:          message,
-		AllowedMentions:  &discordgo.MessageAllowedMentions{
-			Parse: []discordgo.AllowedMentionType{discordgo.AllowedMentionTypeUsers},
+		Content: message,
+		AllowedMentions: &discordgo.MessageAllowedMentions{
+			Parse: []discordgo.AllowedMentionType{},
 		},
 	})
 	return m, err
