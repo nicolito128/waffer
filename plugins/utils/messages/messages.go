@@ -105,6 +105,12 @@ func (msg *Message) SendChannelSafe(str string, args ...any) (*discordgo.Message
 	return m, err
 }
 
+// SendMessageComplex send a message with complex options.
+func (msg *Message) SendMessageComplex(data *discordgo.MessageSend) (*discordgo.Message, error) {
+	m, err := msg.Session.ChannelMessageSendComplex(msg.MC.ChannelID, data)
+	return m, err
+}
+
 // SendChannelEmbed sends a message embed to the message author channel.
 func (msg *Message) SendChannelEmbed(embed *discordgo.MessageEmbed) (*discordgo.Message, error) {
 	if msg.MC.GuildID != "" && embed.Color == 0 {
