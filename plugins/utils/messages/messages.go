@@ -93,6 +93,17 @@ func (msg *Message) SendChannel(str string, args ...any) (*discordgo.Message, er
 	return m, err
 }
 
+func (msg *Message) SendChannelSafe(str string, args ...any) (*discordgo.Message, error) {
+	message := fmt.Sprintf(str, args...)
+	m, err := msg.Session.ChannelMessageSendComplex(msg.MC.ChannelID, &discordgo.MessageSend{
+		Content:          message,
+		AllowedMentions:  &discordgo.MessageAllowedMentions{
+			Parse: []discordgo.AllowedMentionType{discordgo.AllowedMentionTypeUsers},
+		},
+	})
+	return m, err
+}
+
 // SendChannelEmbed sends a message embed to the message author channel.
 func (msg *Message) SendChannelEmbed(embed *discordgo.MessageEmbed) (*discordgo.Message, error) {
 	if msg.MC.GuildID != "" && embed.Color == 0 {
