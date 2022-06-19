@@ -37,27 +37,27 @@ var Command = &commands.WafferCommand{
 		content := strings.Join(args, "")
 		res, err := calculator.Resolve(content)
 		if err != nil {
-			msg.SendChannel("Error: %s", err)
+			msg.SendChannelSafe("Error: %s", err)
 			return
 		}
 
 		switch decimals {
 		case "0f":
-			msg.SendChannel("`%s` = %.0f", content, res)
+			msg.SendChannelSafe("`%s` = %.0f", content, res)
 		case "1f":
-			msg.SendChannel("`%s` = %.1f", content, res)
+			msg.SendChannelSafe("`%s` = %.1f", content, res)
 		case "3f":
-			msg.SendChannel("`%s` = %.3f", content, res)
+			msg.SendChannelSafe("`%s` = %.3f", content, res)
 		case "4f":
-			msg.SendChannel("`%s` = %.4f", content, res)
+			msg.SendChannelSafe("`%s` = %.4f", content, res)
 		case "5f":
-			msg.SendChannel("`%s` = %.5f", content, res)
+			msg.SendChannelSafe("`%s` = %.5f", content, res)
 		case "6f":
-			msg.SendChannel("`%s` = %.6f", content, res)
+			msg.SendChannelSafe("`%s` = %.6f", content, res)
 		case "f":
-			msg.SendChannel("`%s` = %f", content, res)
+			msg.SendChannelSafe("`%s` = %f", content, res)
 		default:
-			msg.SendChannel("`%s` = %.2f", content, res)
+			msg.SendChannelSafe("`%s` = %.2f", content, res)
 		}
 	},
 }

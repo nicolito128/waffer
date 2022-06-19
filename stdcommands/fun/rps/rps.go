@@ -86,8 +86,8 @@ var Command = &commands.WafferCommand{
 
 		// Tie case
 		if move == rbMove {
-			msg.SendChannel("I use %s (%s) and you use %s (%s).", getEmoji(rbMove), rbMove, getEmoji(move), move)
-			msg.SendChannel("We tied! :handshake:")
+			msg.SendChannelSafe("I use %s (%s) and you use %s (%s).", getEmoji(rbMove), rbMove, getEmoji(move), move)
+			msg.SendChannelSafe("We tied! :handshake:")
 			return
 		}
 
