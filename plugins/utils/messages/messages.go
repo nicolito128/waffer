@@ -8,13 +8,24 @@ package messages
 
 import (
 	"fmt"
+	"log"
 	"os"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/joho/godotenv"
 )
 
-var prefix = os.Getenv("BOT_PREFIX")
+func getPrefix() string {
+	err := godotenv.Load(".env")
+	if err != nil {
+		log.Fatal("Error loading .env file")
+	}
+
+	return os.Getenv("BOT_PREFIX")
+}
+
+var prefix = getPrefix()
 
 // Message
 // provide a struct for common functionality
