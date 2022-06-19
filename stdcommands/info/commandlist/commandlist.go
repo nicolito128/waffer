@@ -33,8 +33,6 @@ var Command = &commands.WafferCommand{
 			list = append(list, cmd.Name)
 		}
 
-		msg.SendChannel("*List of commands*")
-		msg.SendChannel("```\n" + strings.Join(list, ", ") + "```")
-		msg.SendChannel("For more information about a command, type `%shelp <command>`.", msg.Prefix)
+		msg.SendChannel("*List of commands* \n```\n"+strings.Join(list, ", ")+"```For more information about a command, type `%shelp <command>`.", msg.Prefix)
 	},
 }
