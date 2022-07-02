@@ -9,14 +9,14 @@ package checks
 
 import (
 	"errors"
-	"os"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/nicolito128/waffer/pkg/env"
 	"github.com/nicolito128/waffer/plugins/utils/messages"
 )
 
-var prefix = os.Getenv("BOT_PREFIX")
+var prefix = env.GetBotPrefix()
 
 // Generals check if all the basic verification are successfully passed.
 func Generals(s *discordgo.Session, m *discordgo.MessageCreate) (err error) {

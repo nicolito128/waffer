@@ -1,31 +1,15 @@
 package message_creation
 
 import (
-	"log"
-	"os"
-
 	"github.com/bwmarrin/discordgo"
-	"github.com/joho/godotenv"
+	"github.com/nicolito128/waffer/pkg/env"
 	"github.com/nicolito128/waffer/plugins/commands"
 	"github.com/nicolito128/waffer/plugins/utils/messages"
 	"github.com/nicolito128/waffer/plugins/utils/permissions"
 	"github.com/nicolito128/waffer/stdcommands"
 )
 
-func getOwnerID() string {
-	if os.Getenv("BOT_MODE") == "production" {
-		return os.Getenv("OWNER_ID")
-	}
-
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
-	return os.Getenv("OWNER_ID")
-}
-
-var ownerID = getOwnerID()
+var ownerID = env.GetOwnerID()
 
 func MessageHasHelpPetition(cmd stdcommands.WafferCommand, msg *messages.Message) bool {
 	if !msg.HasHelpPetition() {

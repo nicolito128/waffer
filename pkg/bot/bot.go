@@ -9,27 +9,16 @@ import (
 	"time"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/joho/godotenv"
+	"github.com/nicolito128/waffer/pkg/env"
 	"github.com/nicolito128/waffer/plugins/utils/checks"
 	"github.com/nicolito128/waffer/plugins/utils/message_creation"
 	"github.com/nicolito128/waffer/plugins/utils/messages"
 	"github.com/nicolito128/waffer/stdcommands"
 )
 
-func loadENV() (string, string, string) {
-	if os.Getenv("BOT_MODE") == "production" {
-		return os.Getenv("BOT_TOKEN"), os.Getenv("BOT_PREFIX"), os.Getenv("BOT_MODE")
-	}
-
-	err := godotenv.Load(".env")
-	if err != nil {
-		log.Fatal("Error loading .env file")
-	}
-
-	return os.Getenv("BOT_TOKEN"), os.Getenv("BOT_PREFIX"), os.Getenv("BOT_MODE")
-}
-
-var token, prefix, mode = loadENV()
+var token = env.GetBotToken()
+var prefix = env.GetBotPrefix()
+var mode = env.GetBotMode()
 
 // Bot
 // provide a basic application struct.
