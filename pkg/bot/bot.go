@@ -20,6 +20,16 @@ var token = env.GetBotToken()
 var prefix = env.GetBotPrefix()
 var mode = env.GetBotMode()
 
+var intents = discordgo.IntentsGuilds |
+	discordgo.IntentsGuildMessages |
+	discordgo.IntentDirectMessageTyping |
+	discordgo.IntentDirectMessages |
+	discordgo.IntentGuildMessages |
+	discordgo.IntentsMessageContent |
+	discordgo.IntentGuildMembers |
+	discordgo.IntentsAllWithoutPrivileged |
+	discordgo.IntentGuildPresences
+
 // Bot
 // provide a basic application struct.
 type Bot struct {
@@ -35,7 +45,7 @@ func New() (*Bot, error) {
 	}
 
 	dg.Identify.Presence.Game.Name = prefix
-	dg.Identify.Intents = discordgo.IntentsGuilds | discordgo.IntentsGuildMessages | discordgo.IntentDirectMessageTyping | discordgo.IntentDirectMessages | discordgo.IntentGuildMessages | discordgo.IntentsMessageContent | discordgo.IntentGuildMembers | discordgo.IntentsAllWithoutPrivileged | discordgo.IntentGuildPresences
+	dg.Identify.Intents = intents
 	logs := log.New(os.Stdout, "", log.Ldate|log.Ltime)
 
 	bot := &Bot{dg, logs}
