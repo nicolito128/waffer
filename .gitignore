@@ -1,3 +1,7 @@
 .env
 .vscode
 /bin
+/temp/*.png
+/temp/*.jpg
+/temp/*.jpeg
+/temp/*.gif
