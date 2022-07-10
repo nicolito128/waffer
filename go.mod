@@ -7,11 +7,11 @@ require (
 	github.com/joho/godotenv v1.4.0
 	github.com/nicolito128/animegirls-holding-programming-books v1.2.6
 	github.com/nicolito128/go-calculator v1.1.0
+	github.com/nicolito128/superimage v0.0.0-20220710021439-9cbc294be315
 )
 
 require (
 	github.com/gorilla/websocket v1.5.0 // indirect
-	github.com/nicolito128/superimage v0.0.0-20220710010611-24c1990210a3 // indirect
 	golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e // indirect
 	golang.org/x/sys v0.0.0-20220520151302-bc2c85ada10a // indirect
 )
