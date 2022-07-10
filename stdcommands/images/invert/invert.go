@@ -41,8 +41,6 @@ var Command = &commands.WafferCommand{
 			return
 		}
 
-		m, _ := msg.SendChannelSafe("Processing image...")
-
 		// Getting the image from URL
 		img, err := superimage.GetImageFromURL(link)
 		if err != nil {
