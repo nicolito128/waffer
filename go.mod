@@ -7,7 +7,7 @@ require (
 	github.com/joho/godotenv v1.4.0
 	github.com/nicolito128/animegirls-holding-programming-books v1.2.6
 	github.com/nicolito128/go-calculator v1.1.0
-	github.com/nicolito128/superimage v0.0.0-20220710021439-9cbc294be315
+	github.com/nicolito128/superimage v0.0.0-20220710023850-83cca0b68cca
 )
 
 require (
