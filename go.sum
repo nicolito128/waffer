@@ -9,8 +9,10 @@ github.com/nicolito128/animegirls-holding-programming-books v1.2.6 h1:bq5q3qqSmB
 github.com/nicolito128/animegirls-holding-programming-books v1.2.6/go.mod h1:9UuyHR3xDHUrkoUEUHdlSxf7r2S9dSXN5eEPOFrYXQg=
 github.com/nicolito128/go-calculator v1.1.0 h1:N4FuElw7RD5D/2h1y69Pga/+bP4GqfO2Y3r4dK1znk4=
 github.com/nicolito128/go-calculator v1.1.0/go.mod h1:VBtd1aqPxpExLteM6DRp3/ThCrGixTnCHKOXoSzKPXM=
-github.com/nicolito128/superimage v1.0.0 h1:XHY3MVnK92/ahTM9jL79WxgJBVJQSa/rFFWE5uDPuK0=
-github.com/nicolito128/superimage v1.0.0/go.mod h1:eXiQwSwTao1MMM79LiM7UI0gVx79gTK7ulCWN+CmmPg=
+github.com/nicolito128/superimage v1.0.1-0.20220711003942-675f848b2839 h1:JBwEP22/0TAtkQOVJMo3/A7nRvN2uzQ7h6ZFIluxkL4=
+github.com/nicolito128/superimage v1.0.1-0.20220711003942-675f848b2839/go.mod h1:eXiQwSwTao1MMM79LiM7UI0gVx79gTK7ulCWN+CmmPg=
+github.com/nicolito128/superimage v1.1.0 h1:yeGwxMYIfLF+hngghG1BLaRy9eeC4zpcmzSR2CbjRx4=
+github.com/nicolito128/superimage v1.1.0/go.mod h1:eXiQwSwTao1MMM79LiM7UI0gVx79gTK7ulCWN+CmmPg=
 golang.org/x/crypto v0.0.0-20210421170649-83a5a9bb288b/go.mod h1:T9bdIzuCu7OtxOm1hfPfRQxPLYneinmdGuTeoZ9dtd4=
 golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e h1:T8NU3HyQ8ClP4SEE+KbFlg6n0NhuTsN4MyznaarGsZM=
 golang.org/x/crypto v0.0.0-20220525230936-793ad666bf5e/go.mod h1:IxCIyHEi3zRg3s0A5j5BB6A9Jmi73HwBIUl50j+osU4=
