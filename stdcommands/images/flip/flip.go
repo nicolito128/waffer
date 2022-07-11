@@ -14,7 +14,7 @@ import (
 var Command = &commands.WafferCommand{
 	Name:        "flip",
 	Aliases:     []string{},
-	Description: "Inverts an image vertically.",
+	Description: "Inverts an image horizontally.",
 	Category:    "images",
 
 	Arguments:    []string{"URL"},
