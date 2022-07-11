@@ -13,7 +13,7 @@ import (
 
 var Command = &commands.WafferCommand{
 	Name:        "invertcolors",
-	Aliases:     []string{"invc"},
+	Aliases:     []string{"invc", "negative"},
 	Description: "Inverts the colors of an image.",
 	Category:    "images",
 
