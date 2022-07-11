@@ -8,6 +8,7 @@ import (
 	"github.com/nicolito128/waffer/stdcommands/development/ping"
 	"github.com/nicolito128/waffer/stdcommands/fun/dog"
 	"github.com/nicolito128/waffer/stdcommands/fun/rps"
+	"github.com/nicolito128/waffer/stdcommands/images/flip"
 	"github.com/nicolito128/waffer/stdcommands/images/invert"
 	"github.com/nicolito128/waffer/stdcommands/info/avatar"
 	"github.com/nicolito128/waffer/stdcommands/info/commandlist"
@@ -35,6 +36,7 @@ func AddCommands() {
 		rps.Command,
 		commandlist.Command,
 		invert.Command,
+		flip.Command,
 	)
 }
 
