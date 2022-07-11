@@ -34,60 +34,34 @@ var Command = &commands.WafferCommand{
 			return
 		}
 
-		// Parsing the link
-		_, format, err := superimage.ParseURL(link)
+		img, err := superimage.GetByURL(link)
 		if err != nil {
-			msg.SendChannelSafe(fmt.Sprintf("**ParseURL error**: %s", err.Error()))
+			msg.SendChannelSafe(fmt.Sprintf("Gettin URL error: %s", err.Error()))
 			return
 		}
 
-		// Getting the image from URL
-		img, err := superimage.GetImageFromURL(link)
-		if err != nil {
-			msg.SendChannelSafe(fmt.Sprintf("**GetImageFromURL error**: %s", err.Error()))
-			return
-		}
-
-		// Creating a buffer to store the image
-		// and then encoding it
 		buf := new(bytes.Buffer)
-		err = superimage.Encode(buf, img, format)
+		err = superimage.Encode(buf, img, nil)
 		if err != nil {
-			msg.SendChannelSafe(fmt.Sprintf("**Encode error**: %s", err.Error()))
+			msg.SendChannelSafe(fmt.Sprintf("Encoding error: %s", err.Error()))
 			return
 		}
 
-		// Writing the image to a file
-		err = ioutil.WriteFile(fmt.Sprintf("./temp/tmp.%s", format), buf.Bytes(), 0666)
-		if err != nil {
-			msg.SendChannelSafe(fmt.Sprintf("**WriteFile error**: %s", err.Error()))
-			return
-		}
-
-		// Inverting the colors
-		inverseImg := superimage.InvertColors(img)
-
-		// Creating a new buffer to store the image (required)
-		// and then encoding it
+		neg := superimage.Negative(img)
 		buf = new(bytes.Buffer)
-		err = superimage.Encode(buf, inverseImg, format)
+		err = superimage.Encode(buf, neg, nil)
 		if err != nil {
-			msg.SendChannelSafe(fmt.Sprintf("**Encode inverse error**: %s", err.Error()))
+			msg.SendChannelSafe(fmt.Sprintf("Encoding error: %s", err.Error()))
 			return
 		}
 
-		// Writing the inverse colors image to a file
-		err = ioutil.WriteFile(fmt.Sprintf("./temp/tmp.%s", format), buf.Bytes(), 0666)
-		if err != nil {
-			msg.SendChannelSafe(fmt.Sprintf("**WriteFile inverse error**: %s", err.Error()))
-			return
-		}
+		ioutil.WriteFile("temp/invert.png", buf.Bytes(), 0644)
 
 		msg.SendMessageComplex(&discordgo.MessageSend{
 			File: &discordgo.File{
-				Name:        fmt.Sprintf("/temp/tmp.%s", format),
+				Name:        fmt.Sprintf("/temp/tmp.%s", neg.Format),
 				Reader:      bytes.NewReader(buf.Bytes()),
-				ContentType: fmt.Sprintf("image/%s", format),
+				ContentType: fmt.Sprintf("image/%s", neg.Format),
 			},
 		})
 	},
