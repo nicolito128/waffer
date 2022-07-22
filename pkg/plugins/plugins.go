@@ -13,13 +13,13 @@ var CommandCollection = make(Collection[Plugin[*discordgo.MessageCreate]])
 type Collection[T any] map[string]T
 
 // PluginHandler represents the structs that will be used to handle the plugins.
-// Like Gumdrop or discordgo.Session.
+// Like discordgo.Session.
 type PluginHandler interface {
 	AddHandler(interface{}) func()
 	AddHandlerOnce(interface{}) func()
 }
 
-// GumdropPlugin represents a plugin for the grumdrop bot.
+// Plugin represents a plugin for the bot.
 type Plugin[T any] struct {
 	// Plugin name.
 	Name string
@@ -73,7 +73,7 @@ func (p Plugin[T]) HelpEmbed() (*discordgo.MessageEmbed, error) {
 	return embed, nil
 }
 
-// AddPlugin adds a plugin to the grumdrop PluginCollection.
+// AddPlugin adds a plugin to the collection.
 func AddPlugin[T any](col Collection[Plugin[T]], plugin ...Plugin[T]) {
 	for _, p := range plugin {
 		fmt.Printf("Plugin '%s' added.\n", p.Name)
