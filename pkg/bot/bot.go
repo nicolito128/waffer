@@ -1,143 +1,53 @@
 package bot
 
 import (
-	"log"
+	"flag"
+	"fmt"
 	"os"
 	"os/signal"
-	"strings"
 	"syscall"
-	"time"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/nicolito128/waffer/pkg/env"
-	"github.com/nicolito128/waffer/plugins/utils/checks"
-	"github.com/nicolito128/waffer/plugins/utils/message_creation"
-	"github.com/nicolito128/waffer/plugins/utils/messages"
-	"github.com/nicolito128/waffer/stdcommands"
+	"github.com/nicolito128/waffer/pkg/config"
 )
 
-var token = env.GetBotToken()
-var prefix = env.GetBotPrefix()
-var mode = env.GetBotMode()
+/* New creates a new Gumdrop struct. */
+func New(con *config.ConnectionConfig) (*discordgo.Session, error) {
+	flag.StringVar(&con.Token, "token", con.Token, "Discord bot token")
+	flag.StringVar(&con.OwnerID, "owner", con.OwnerID, "Discord bot owner")
+	flag.StringVar(&con.Prefix, "prefix", con.Prefix, "Discord bot prefix")
+	flag.Parse()
 
-var intents = discordgo.IntentsGuilds |
-	discordgo.IntentsGuildMessages |
-	discordgo.IntentDirectMessageTyping |
-	discordgo.IntentDirectMessages |
-	discordgo.IntentGuildMessages |
-	discordgo.IntentsMessageContent |
-	discordgo.IntentGuildMembers |
-	discordgo.IntentsAllWithoutPrivileged |
-	discordgo.IntentGuildPresences
+	config.Config = *con
 
-// Bot
-// provide a basic application struct.
-type Bot struct {
-	session *discordgo.Session // Bot session
-	logs    *log.Logger        // Output information and errors
-}
+	if con.Token == "" || len(con.Token) < 1 {
+		return nil, config.ConfigTokenError
+	}
 
-// New returns a new bot session and an error.
-func New() (*Bot, error) {
-	dg, err := discordgo.New("Bot " + token)
+	s, err := discordgo.New("Bot " + con.Token)
 	if err != nil {
 		return nil, err
 	}
 
-	dg.Identify.Presence.Game.Name = prefix
-	dg.Identify.Intents = intents
-	logs := log.New(os.Stdout, "", log.Ldate|log.Ltime)
+	s.Identify.Intents = con.Intents
 
-	bot := &Bot{dg, logs}
-	return bot, nil
+	return s, nil
 }
 
-// Run open and starts the bot connection.
-func (b *Bot) Run() {
-	err := b.session.Open()
+/* Init initializes the bot. */
+func Init(g *discordgo.Session) error {
+	err := g.Open()
 	if err != nil {
-		b.logs.Fatalf("error opening connection, %s", err)
+		return err
 	}
 
-	if mode == "debug" || mode == "" {
-		b.logs.Println("Running debug mode.")
-		go b.setStatusLog()
-	}
+	fmt.Printf("Bot now running as %s. Press CTRL+C to exit.\n", g.State.User.Username)
 
-	b.AddHandler(messageMentionBot)
+	// Wait here until CTRL+C or other term signal is received.
+	stop := make(chan os.Signal)
+	signal.Notify(stop, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
+	<-stop
 
-	stdcommands.AddCommands()
-	b.AddCommandsHandler()
-
-	b.logs.Println("Bot is now running.  Press CTRL-C to exit.")
-	sc := make(chan os.Signal, 1)
-
-	signal.Notify(sc, syscall.SIGINT, syscall.SIGTERM, os.Interrupt, os.Kill)
-	<-sc
-
-	b.session.Close()
-}
-
-// AddCommandsHandler is in charge of setting the primary function
-// that will check when users on any server try to use a command.
-func (b *Bot) AddCommandsHandler() {
-	b.session.AddHandler(func(s *discordgo.Session, m *discordgo.MessageCreate) {
-		clist := stdcommands.GetCommandList()
-		msg := messages.New(s, m)
-		commandName := msg.GetCommand()
-		existsCommand := stdcommands.HasCommand(commandName)
-
-		if existsCommand && strings.HasPrefix(msg.Content, msg.GetCommandWithPrefix()) {
-			cmd := clist[commandName]
-
-			// Basic verification for no-bot attention.
-			err := checks.Generals(s, m)
-			if err != nil {
-				return
-			}
-
-			// If the command can be executed.
-			ok := message_creation.UserCanRunCommand(cmd, s, m, msg)
-			if !ok {
-				return
-			}
-
-			// Execute the command in a new goroutine.
-			go cmd.GetTrigger(s, m, msg)
-		}
-	})
-}
-
-// AddHandler set a new handler for the current session.
-func (b *Bot) AddHandler(handler any) {
-	b.session.AddHandler(handler)
-}
-
-// setStatusLog set console messages for debug mode, every 10 seconds.
-func (b *Bot) setStatusLog() {
-	tdr := time.Tick(10 * time.Second)
-	for range tdr {
-		b.logs.Printf(`Presence: %s | Guilds: %d | Message count: %d | Private channels: %d `,
-			b.session.Identify.Presence.Game.Name,
-			len(b.session.State.Guilds),
-			len(b.session.State.PrivateChannels),
-			b.session.State.MaxMessageCount)
-	}
-}
-
-// Every time someone mention the bot, this function will be called.
-func messageMentionBot(s *discordgo.Session, m *discordgo.MessageCreate) {
-	mentions := m.Mentions
-	if s.State.User.Bot {
-		return
-	}
-
-	if len(mentions) == 1 && m.Author.ID != s.State.User.ID && m.MessageReference == nil {
-		for _, mention := range mentions {
-			if mention.ID == s.State.User.ID {
-				s.ChannelMessageSend(m.ChannelID, "Hello, I'm Waffer, a Discord bot made by @n128#5523. You can get more information about me with the commands `"+prefix+"help` and `"+prefix+"dev`.")
-				return
-			}
-		}
-	}
+	// Close the connection
+	return g.Close()
 }

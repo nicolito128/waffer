@@ -3,20 +3,40 @@ package app
 import (
 	"log"
 
+	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/pkg/bot"
+	"github.com/nicolito128/waffer/pkg/config"
+	"github.com/nicolito128/waffer/pkg/env"
+	"github.com/nicolito128/waffer/stdcommands"
 )
 
-var Bot = StartSession()
+var intents = discordgo.IntentsGuilds |
+	discordgo.IntentsGuildMessages |
+	discordgo.IntentDirectMessageTyping |
+	discordgo.IntentDirectMessages |
+	discordgo.IntentGuildMessages |
+	discordgo.IntentsMessageContent |
+	discordgo.IntentGuildMembers |
+	discordgo.IntentsAllWithoutPrivileged |
+	discordgo.IntentGuildPresences
 
-func Init() {
-	Bot.Run()
-}
+func Start() {
+	s, err := bot.New(&config.ConnectionConfig{
+		Token:   env.Get("BOT_TOKEN"),
+		Intents: intents,
+		OwnerID: env.Get("OWNER_ID"),
+		Prefix:  env.Get("BOT_PREFIX"),
+	})
 
-func StartSession() *bot.Bot {
-	bot, err := bot.New()
 	if err != nil {
-		log.Fatalf("error cannot create a new app-bot: %s", err)
+		log.Fatalf("Error creating Discord session: %s", err)
 	}
 
-	return bot
+	s.Identify.Presence.Game.Name = env.Get("BOT_PREFIX")
+
+	stdcommands.LoadCommands(s)
+
+	if err = bot.Init(s); err != nil {
+		log.Fatalf("Error initializing bot: %s", err)
+	}
 }

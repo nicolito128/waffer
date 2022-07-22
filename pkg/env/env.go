@@ -18,22 +18,7 @@ func loadENV() {
 	}
 }
 
-func GetBotMode() string {
+func Get(key string) string {
 	loadENV()
-	return os.Getenv("BOT_MODE")
-}
-
-func GetOwnerID() string {
-	loadENV()
-	return os.Getenv("OWNER_ID")
-}
-
-func GetBotToken() string {
-	loadENV()
-	return os.Getenv("BOT_TOKEN")
-}
-
-func GetBotPrefix() string {
-	loadENV()
-	return os.Getenv("BOT_PREFIX")
+	return os.Getenv(key)
 }
