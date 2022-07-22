@@ -1,6 +1,7 @@
 package permissions
 
 import (
+	"fmt"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -79,7 +80,7 @@ func MessageHasArguments(s *discordgo.Session, m *discordgo.MessageCreate, cmd p
 			args := strings.Split(strings.Trim(m.Content, " "), " ")
 
 			if len(args) < int(cmd.Command.RequiredArgs) {
-				s.ChannelMessageSend(m.ChannelID, "You need to provide more arguments.")
+				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You must provide more arguments. Use `%shelp %s` for more information.", config.Config.Prefix, cmd.Name))
 				return false
 			}
 		}
