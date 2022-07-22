@@ -17,7 +17,7 @@ var Command = plugins.Plugin[*discordgo.MessageCreate]{
 	Command: &plugins.CommandData{
 		Description:  "Inverts an image horizontally.",
 		Category:     "images",
-		Arguments:    []string{"<url>"},
+		Arguments:    []string{"<url>.png/.jpg/.jpeg"},
 		RequiredArgs: 1,
 		Permissions: plugins.CommandPermissions{
 			AllowDM: true,
