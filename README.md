@@ -15,11 +15,11 @@ Get packages:
 
     go get
 
-You need to set a "BOT_TOKEN" and a "BOT_PREFIX" environment variables, for more information about that consult .env.example.
+You need to set a "BOT_TOKEN" and a "BOT_PREFIX" environment variables, for more information about that consult .env.example. Also, you can use `--token` and `--prefix` flags to start the bot.
 
 Run app:
 
-    go run main.go
+    go run main.go --prefix <PREFIX> --token <YOUR_TOKEN>
 
 ## Interest links
 * [bwmarrin/discordgo][1]
