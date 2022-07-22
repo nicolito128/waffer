@@ -4,8 +4,9 @@ import (
 	"time"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/nicolito128/waffer/pkg/plugins"
+	"github.com/nicolito128/waffer/pkg/plugins/supermessage"
 	"github.com/nicolito128/waffer/pkg/queries"
-	"github.com/nicolito128/waffer/plugins/commands"
 )
 
 type DogAPI struct {
@@ -15,42 +16,39 @@ type DogAPI struct {
 
 var api = "https://dog.ceo/api/breeds/image/random"
 
-var Command = &commands.WafferCommand{
-	Name:        "dog",
-	Description: "Sends a random dog image",
-	Aliases:     []string{"doggo"},
-	Category:    "fun",
-
-	RunInDM: true,
-
-	Arguments:    []string{},
-	RequiredArgs: 0,
-
-	DiscordPermissions: discordgo.PermissionSendMessages,
-
-	OwnerOnly: false,
-
-	RunFunc: func(data *commands.HandlerData) {
-		var dog DogAPI
-
-		msg := data.Message
-		err := queries.Get(api, &dog)
-		if err != nil {
-			msg.SendChannel("Error getting dog image")
-			return
-		}
-
-		img := dog.Message
-		msg.SendChannelEmbed(&discordgo.MessageEmbed{
-			Title: "What the dog doin'",
-			URL:   img,
-			Image: &discordgo.MessageEmbedImage{
-				URL: string(img),
-			},
-			Footer: &discordgo.MessageEmbedFooter{
-				Text: "Powered by https://dog.ceo",
-			},
-			Timestamp: time.Now().Format(time.RFC3339),
-		})
+var Command = plugins.Plugin[*discordgo.MessageCreate]{
+	Name: "dog",
+	Command: &plugins.CommandData{
+		Description: "Sends a random dog image.",
+		Category:    "fun",
+		Permissions: plugins.CommandPermissions{
+			AllowDM: true,
+			Require: discordgo.PermissionSendMessages & discordgo.PermissionAttachFiles,
+		},
 	},
+	Handler: Handler,
+}
+
+func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
+	var dog DogAPI
+	sm := supermessage.New(s, m)
+
+	err := queries.Get(api, &dog)
+	if err != nil {
+		sm.ChannelSend("Error getting dog image.")
+		return
+	}
+
+	img := dog.Message
+	sm.ChannelSendEmbed(&discordgo.MessageEmbed{
+		Title: "What the dog doin'",
+		URL:   img,
+		Image: &discordgo.MessageEmbedImage{
+			URL: string(img),
+		},
+		Footer: &discordgo.MessageEmbedFooter{
+			Text: "Powered by https://dog.ceo",
+		},
+		Timestamp: time.Now().Format(time.RFC3339),
+	})
 }

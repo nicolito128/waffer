@@ -1,55 +1,68 @@
 package stdcommands
 
 import (
-	"github.com/nicolito128/waffer/plugins/commands"
-	holdingbooks "github.com/nicolito128/waffer/stdcommands/anime/holding-books"
-	"github.com/nicolito128/waffer/stdcommands/development/dev"
-	"github.com/nicolito128/waffer/stdcommands/development/github"
-	"github.com/nicolito128/waffer/stdcommands/development/ping"
+	"strings"
+
+	"github.com/bwmarrin/discordgo"
+	"github.com/nicolito128/waffer/pkg/config"
+	"github.com/nicolito128/waffer/pkg/plugins"
+	"github.com/nicolito128/waffer/pkg/plugins/permissions"
+	"github.com/nicolito128/waffer/stdcommands/fun/animegirl"
 	"github.com/nicolito128/waffer/stdcommands/fun/dog"
-	"github.com/nicolito128/waffer/stdcommands/fun/rps"
 	"github.com/nicolito128/waffer/stdcommands/images/flip"
-	"github.com/nicolito128/waffer/stdcommands/images/invert"
+	"github.com/nicolito128/waffer/stdcommands/images/negative"
 	"github.com/nicolito128/waffer/stdcommands/info/avatar"
 	"github.com/nicolito128/waffer/stdcommands/info/commandlist"
+	"github.com/nicolito128/waffer/stdcommands/info/devserver"
+	"github.com/nicolito128/waffer/stdcommands/info/github"
 	"github.com/nicolito128/waffer/stdcommands/info/help"
 	"github.com/nicolito128/waffer/stdcommands/info/invite"
+	"github.com/nicolito128/waffer/stdcommands/ping"
 	"github.com/nicolito128/waffer/stdcommands/util/calc"
 	"github.com/nicolito128/waffer/stdcommands/util/say"
 )
 
-type WafferCommand *commands.WafferCommand
-
-// AddCommands load all the commands.
-func AddCommands() {
-	commands.AddRootCommands(
+func LoadCommands(s *discordgo.Session) {
+	plugins.AddPlugin(
+		plugins.CommandCollection,
 		ping.Command,
-		dev.Command,
-		avatar.Command,
-		calc.Command,
-		holdingbooks.Command,
-		github.Command,
-		help.Command,
-		say.Command,
-		dog.Command,
-		invite.Command,
-		rps.Command,
 		commandlist.Command,
-		invert.Command,
+		help.Command,
+		calc.Command,
+		say.Command,
+		avatar.Command,
+		invite.Command,
+		devserver.Command,
+		github.Command,
+		dog.Command,
+		animegirl.Command,
 		flip.Command,
+		negative.Command,
 	)
+
+	s.AddHandler(Command)
 }
 
-// HasCommand return true if command list has the command name passed.
-func HasCommand(commandName string) bool {
-	if commands.CommandList[commandName] != nil {
-		return true
+func Command(s *discordgo.Session, m *discordgo.MessageCreate) {
+	err := Checker(s, m, permissions.ValidPrefix, permissions.ValidAuthor)
+	if err != nil {
+		return
 	}
 
-	return false
-}
+	cmd := strings.Replace(strings.Split(m.Content, " ")[0], config.Config.Prefix, "", 1)
+	p, err := plugins.GetPlugin(plugins.CommandCollection, cmd)
+	if err != nil {
+		return
+	}
 
-// GetCommandList return a map[string]:*WafferCommand
-func GetCommandList() commands.CList {
-	return commands.CommandList
+	if err = CommandChecker(s, m, p,
+		permissions.AllowDM,
+		permissions.MessageHasArguments,
+		permissions.OwnerOnly,
+		permissions.HasHelpPetition,
+		permissions.MemberHasPermission,
+	); err != nil {
+		return
+	}
+	go p.Handler(s, m)
 }

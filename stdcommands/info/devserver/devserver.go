@@ -1,4 +1,4 @@
-package invite
+package devserver
 
 import (
 	"github.com/bwmarrin/discordgo"
@@ -6,12 +6,12 @@ import (
 	"github.com/nicolito128/waffer/pkg/plugins/supermessage"
 )
 
-var link = "https://discord.com/oauth2/authorize?client_id=961017912355864617&scope=bot+applications.commands&permissions=8"
+var link = "https://discord.gg/yWqmnE4UmG"
 
 var Command = plugins.Plugin[*discordgo.MessageCreate]{
-	Name: "invite",
+	Name: "devserver",
 	Command: &plugins.CommandData{
-		Description: "Invite me to your server!",
+		Description: "Development discord server.",
 		Category:    "info",
 		Permissions: plugins.CommandPermissions{
 			AllowDM: true,
@@ -23,5 +23,5 @@ var Command = plugins.Plugin[*discordgo.MessageCreate]{
 
 func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	sm := supermessage.New(s, m)
-	sm.ChannelSend("Here is the invite link for your server: %s", link)
+	sm.ChannelSend("**Development server**: %s", link)
 }
