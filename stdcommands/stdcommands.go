@@ -7,9 +7,14 @@ import (
 	"github.com/nicolito128/waffer/pkg/config"
 	"github.com/nicolito128/waffer/pkg/plugins"
 	"github.com/nicolito128/waffer/pkg/plugins/permissions"
+	"github.com/nicolito128/waffer/stdcommands/fun/animegirl"
+	"github.com/nicolito128/waffer/stdcommands/fun/dog"
 	"github.com/nicolito128/waffer/stdcommands/info/avatar"
 	"github.com/nicolito128/waffer/stdcommands/info/commandlist"
+	"github.com/nicolito128/waffer/stdcommands/info/devserver"
+	"github.com/nicolito128/waffer/stdcommands/info/github"
 	"github.com/nicolito128/waffer/stdcommands/info/help"
+	"github.com/nicolito128/waffer/stdcommands/info/invite"
 	"github.com/nicolito128/waffer/stdcommands/ping"
 	"github.com/nicolito128/waffer/stdcommands/util/calc"
 	"github.com/nicolito128/waffer/stdcommands/util/say"
@@ -24,6 +29,11 @@ func LoadCommands(s *discordgo.Session) {
 		calc.Command,
 		say.Command,
 		avatar.Command,
+		invite.Command,
+		devserver.Command,
+		github.Command,
+		dog.Command,
+		animegirl.Command,
 	)
 
 	s.AddHandler(Command)
