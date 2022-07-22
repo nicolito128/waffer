@@ -4,35 +4,35 @@ import (
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/nicolito128/waffer/plugins/commands"
+	"github.com/nicolito128/waffer/pkg/plugins"
+	"github.com/nicolito128/waffer/pkg/plugins/supermessage"
 )
 
-var Command = &commands.WafferCommand{
-	Name:        "commandlist",
-	Aliases:     []string{"commands"},
-	Description: "Get a list of commands.",
-	Category:    "info",
+var Command = plugins.Plugin[*discordgo.MessageCreate]{
+	Name: "commandlist",
+	Command: &plugins.CommandData{
+		Description: "Get a list of all commands.",
+		Category:    "info",
+		Permissions: plugins.CommandPermissions{
+			AllowDM: true,
+			Require: discordgo.PermissionSendMessages,
+		},
+	},
+	Handler: Handler,
+}
 
-	Arguments:    []string{},
-	RequiredArgs: 0,
+func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
+	sm := supermessage.New(s, m)
+	clist := plugins.CommandCollection
 
-	OwnerOnly:          false,
-	DiscordPermissions: discordgo.PermissionSendMessages,
-
-	RunInDM: true,
-
-	RunFunc: func(data *commands.HandlerData) {
-		msg := data.Message
-		clist := commands.CommandList
-
-		var list []string
-		for _, cmd := range clist {
-			if strings.Contains(strings.Join(list, " "), cmd.Name) {
-				continue
-			}
-			list = append(list, cmd.Name)
+	var list []string
+	for _, cmd := range clist {
+		if strings.Contains(strings.Join(list, " "), cmd.Name) {
+			continue
 		}
 
-		msg.SendChannel("*List of commands* \n```\n"+strings.Join(list, ", ")+"```For more information about a command, type `%shelp <command>`.", msg.Prefix)
-	},
+		list = append(list, cmd.Name)
+	}
+
+	sm.ChannelSend("*List of commands* \n```\n"+strings.Join(list, ", ")+"```For more information about a command, type `%shelp <command>`.", sm.Prefix)
 }
