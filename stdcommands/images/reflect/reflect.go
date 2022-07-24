@@ -1,4 +1,4 @@
-package negative
+package reflect
 
 import (
 	"bytes"
@@ -13,9 +13,9 @@ import (
 )
 
 var Command = plugins.Plugin[*discordgo.MessageCreate]{
-	Name: "negative",
+	Name: "reflect",
 	Command: &plugins.CommandData{
-		Description:  "Inverts the colors of an image.",
+		Description:  "Inverts an image vertically.",
 		Category:     "images",
 		Arguments:    []string{"<url>.png/.jpg/.jpeg"},
 		RequiredArgs: 1,
@@ -50,24 +50,24 @@ func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	neg := superimage.Negative(img)
+	reflected := superimage.Reflect(img)
 	buf = new(bytes.Buffer)
-	err = superimage.Encode(buf, neg, nil)
+	err = superimage.Encode(buf, reflected, nil)
 	if err != nil {
 		sm.ChannelSend(fmt.Sprintf("Encoding error: %s", err.Error()))
 		return
 	}
 
-	ioutil.WriteFile(fmt.Sprintf("temp/negative.%s", neg.Format), buf.Bytes(), 0644)
+	ioutil.WriteFile(fmt.Sprintf("/temp/reflected.%s", reflected.Format), buf.Bytes(), 0644)
 	del := make(chan bool)
 
 	go func() {
 		sm.ChannelSend("Processing image...")
 		_, err := sm.ChannelSendComplex(&discordgo.MessageSend{
 			File: &discordgo.File{
-				Name:        fmt.Sprintf("/temp/negative.%s", neg.Format),
+				Name:        fmt.Sprintf("/temp/reflected.%s", reflected.Format),
 				Reader:      bytes.NewReader(buf.Bytes()),
-				ContentType: fmt.Sprintf("image/%s", neg.Format),
+				ContentType: fmt.Sprintf("image/%s", reflected.Format),
 			},
 		})
 
@@ -79,6 +79,6 @@ func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}()
 
 	if <-del {
-		os.Remove(fmt.Sprintf("/temp/negative.%s", neg.Format))
+		os.Remove(fmt.Sprintf("/temp/reflected.%s", reflected.Format))
 	}
 }

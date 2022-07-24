@@ -62,13 +62,18 @@ func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	del := make(chan bool)
 
 	go func() {
-		sm.ChannelSendComplex(&discordgo.MessageSend{
+		sm.ChannelSend("Processing image...")
+		_, err := sm.ChannelSendComplex(&discordgo.MessageSend{
 			File: &discordgo.File{
 				Name:        fmt.Sprintf("/temp/flip.%s", flipped.Format),
 				Reader:      bytes.NewReader(buf.Bytes()),
 				ContentType: fmt.Sprintf("image/%s", flipped.Format),
 			},
 		})
+
+		if err != nil {
+			sm.ChannelSend("Error sending image.")
+		}
 
 		del <- true
 	}()

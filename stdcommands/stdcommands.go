@@ -11,6 +11,7 @@ import (
 	"github.com/nicolito128/waffer/stdcommands/fun/dog"
 	"github.com/nicolito128/waffer/stdcommands/images/flip"
 	"github.com/nicolito128/waffer/stdcommands/images/negative"
+	"github.com/nicolito128/waffer/stdcommands/images/reflect"
 	"github.com/nicolito128/waffer/stdcommands/info/avatar"
 	"github.com/nicolito128/waffer/stdcommands/info/commandlist"
 	"github.com/nicolito128/waffer/stdcommands/info/devserver"
@@ -26,18 +27,29 @@ func LoadCommands(s *discordgo.Session) {
 	plugins.AddPlugin(
 		plugins.CommandCollection,
 		ping.Command,
-		commandlist.Command,
-		help.Command,
+
+		// Utils
 		calc.Command,
 		say.Command,
+
+		// Information
+		help.Command,
+		commandlist.Command,
 		avatar.Command,
 		invite.Command,
 		devserver.Command,
 		github.Command,
+
+		// APIs
 		dog.Command,
+
+		// Anime
 		animegirl.Command,
+
+		// Images
 		flip.Command,
 		negative.Command,
+		reflect.Command,
 	)
 
 	s.AddHandler(Command)
