@@ -11,7 +11,7 @@ import (
 	"github.com/nicolito128/waffer/pkg/config"
 )
 
-/* New creates a new Gumdrop struct. */
+/* New creates a new discordgo Session. */
 func New(con *config.ConnectionConfig) (*discordgo.Session, error) {
 	flag.StringVar(&con.Token, "token", con.Token, "Discord bot token")
 	flag.StringVar(&con.OwnerID, "owner", con.OwnerID, "Discord bot owner")
