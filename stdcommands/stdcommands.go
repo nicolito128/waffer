@@ -9,6 +9,7 @@ import (
 	"github.com/nicolito128/waffer/pkg/plugins/permissions"
 	"github.com/nicolito128/waffer/stdcommands/fun/animegirl"
 	"github.com/nicolito128/waffer/stdcommands/fun/dog"
+	"github.com/nicolito128/waffer/stdcommands/images/blur"
 	"github.com/nicolito128/waffer/stdcommands/images/flip"
 	"github.com/nicolito128/waffer/stdcommands/images/negative"
 	"github.com/nicolito128/waffer/stdcommands/images/reflect"
@@ -50,6 +51,7 @@ func LoadCommands(s *discordgo.Session) {
 		flip.Command,
 		negative.Command,
 		reflect.Command,
+		blur.Command,
 	)
 
 	s.AddHandler(Command)
