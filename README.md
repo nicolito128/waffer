@@ -4,7 +4,7 @@
 A discord bot written in Go.
 
 
-<img align="right" alt="Waffer logo" src="https://i.imgur.com/guq55Wb_d.png" width="150">
+<img align="right" alt="Waffer logo" src="https://i.imgur.com/TXjXenF.png" width="150">
 
 ## Deploy
 Clone the repository:
