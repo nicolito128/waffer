@@ -8,21 +8,27 @@ import (
 	"github.com/bwmarrin/discordgo"
 	animegirls "github.com/nicolito128/animegirls-holding-programming-books"
 	"github.com/nicolito128/waffer/pkg/plugins"
+	"github.com/nicolito128/waffer/pkg/plugins/commands"
 	"github.com/nicolito128/waffer/pkg/plugins/supermessage"
 )
 
-var Command = plugins.Plugin[*discordgo.MessageCreate]{
-	Name: "animegirl",
-	Command: &plugins.CommandData{
+var Command = &commands.WafferCommand{
+	Plugin: &plugins.Plugin[*discordgo.MessageCreate]{
+		Name:    "animegirl",
+		Type:    plugins.MessageCreateType,
+		Handler: Handler,
+	},
+
+	Data: &commands.CommandData{
+		Name:        "animegirl",
 		Description: "Sends a random anime holding a programming book. Based repository: https://github.com/cat-milk/Anime-Girls-Holding-Programming-Books",
 		Category:    "fun",
 		Arguments:   []string{"<programming language>[optional]"},
-		Permissions: plugins.CommandPermissions{
+		Permissions: &commands.CommandPermissions{
 			AllowDM: true,
 			Require: discordgo.PermissionSendMessages & discordgo.PermissionAttachFiles,
 		},
 	},
-	Handler: Handler,
 }
 
 func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {

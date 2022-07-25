@@ -9,22 +9,29 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/superimage"
 	"github.com/nicolito128/waffer/pkg/plugins"
+	"github.com/nicolito128/waffer/pkg/plugins/commands"
 	"github.com/nicolito128/waffer/pkg/plugins/supermessage"
 )
 
-var Command = plugins.Plugin[*discordgo.MessageCreate]{
-	Name: "reflect",
-	Command: &plugins.CommandData{
-		Description:  "Inverts an image vertically.",
+// Create a commands.WafferCommand
+var Command = &commands.WafferCommand{
+	Plugin: &plugins.Plugin[*discordgo.MessageCreate]{
+		Name:    "reflect",
+		Type:    plugins.MessageCreateType,
+		Handler: Handler,
+	},
+
+	Data: &commands.CommandData{
+		Name:         "reflect",
+		Description:  "Reflect an image.",
 		Category:     "images",
 		Arguments:    []string{"<url>.png/.jpg/.jpeg"},
 		RequiredArgs: 1,
-		Permissions: plugins.CommandPermissions{
+		Permissions: &commands.CommandPermissions{
 			AllowDM: true,
 			Require: discordgo.PermissionSendMessages & discordgo.PermissionAttachFiles,
 		},
 	},
-	Handler: Handler,
 }
 
 func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {

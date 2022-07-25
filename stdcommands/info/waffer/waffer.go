@@ -6,19 +6,26 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/pkg/plugins"
+	"github.com/nicolito128/waffer/pkg/plugins/commands"
 	"github.com/nicolito128/waffer/pkg/plugins/supermessage"
 )
 
-var Command = plugins.Plugin[*discordgo.MessageCreate]{
-	Name: "waffer",
-	Command: &plugins.CommandData{
-		Description: "Bot stats and info.",
-		Permissions: plugins.CommandPermissions{
+var Command = &commands.WafferCommand{
+	Plugin: &plugins.Plugin[*discordgo.MessageCreate]{
+		Name:    "waffer",
+		Type:    plugins.MessageCreateType,
+		Handler: Handler,
+	},
+
+	Data: &commands.CommandData{
+		Name:        "waffer",
+		Description: "Shows Waffer information.",
+		Category:    "info",
+		Permissions: &commands.CommandPermissions{
 			AllowDM: true,
 			Require: discordgo.PermissionSendMessages,
 		},
 	},
-	Handler: Handler,
 }
 
 func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -43,7 +50,7 @@ func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			{Name: "Guilds", Value: fmt.Sprintf("%d", guilds), Inline: true},
 			{Name: "Channels", Value: fmt.Sprintf("%d", channels), Inline: true},
 			{Name: "Members", Value: fmt.Sprintf("%d", users), Inline: true},
-			{Name: "Commands", Value: fmt.Sprintf("%d", len(plugins.CommandCollection)), Inline: true},
+			{Name: "Commands", Value: fmt.Sprintf("%d", len(commands.CommandCollection)), Inline: true},
 			{Name: "Ping", Value: fmt.Sprintf("%dms", s.HeartbeatLatency().Milliseconds()), Inline: true},
 			{Name: "OS", Value: runtime.GOOS, Inline: true},
 			{Name: "Go Version", Value: runtime.Version(), Inline: true},

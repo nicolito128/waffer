@@ -5,8 +5,8 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/pkg/config"
-	"github.com/nicolito128/waffer/pkg/plugins"
-	"github.com/nicolito128/waffer/pkg/plugins/permissions"
+	"github.com/nicolito128/waffer/pkg/plugins/commands"
+	"github.com/nicolito128/waffer/pkg/plugins/commands/permissions"
 	"github.com/nicolito128/waffer/stdcommands/fun/animegirl"
 	"github.com/nicolito128/waffer/stdcommands/fun/dog"
 	"github.com/nicolito128/waffer/stdcommands/images/blur"
@@ -27,8 +27,7 @@ import (
 )
 
 func LoadCommands(s *discordgo.Session) {
-	plugins.AddPlugin(
-		plugins.CommandCollection,
+	commands.AddList(
 		ping.Command,
 
 		// Utils
@@ -68,12 +67,12 @@ func Command(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	cmd := strings.Replace(strings.Split(m.Content, " ")[0], config.Config.Prefix, "", 1)
-	p, err := plugins.GetPlugin(plugins.CommandCollection, cmd)
+	command, err := commands.Get(cmd)
 	if err != nil {
 		return
 	}
 
-	if err = CommandChecker(s, m, p,
+	if err = CommandChecker(s, m, command,
 		permissions.AllowDM,
 		permissions.MessageHasArguments,
 		permissions.OwnerOnly,
@@ -82,5 +81,5 @@ func Command(s *discordgo.Session, m *discordgo.MessageCreate) {
 	); err != nil {
 		return
 	}
-	go p.Handler(s, m)
+	go command.Plugin.Handler(s, m)
 }

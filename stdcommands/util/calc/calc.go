@@ -6,22 +6,28 @@ import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/go-calculator"
 	"github.com/nicolito128/waffer/pkg/plugins"
+	"github.com/nicolito128/waffer/pkg/plugins/commands"
 	"github.com/nicolito128/waffer/pkg/plugins/supermessage"
 )
 
-var Command = plugins.Plugin[*discordgo.MessageCreate]{
-	Name: "calc",
-	Command: &plugins.CommandData{
+var Command = &commands.WafferCommand{
+	Plugin: &plugins.Plugin[*discordgo.MessageCreate]{
+		Name:    "calc",
+		Type:    plugins.MessageCreateType,
+		Handler: Handler,
+	},
+
+	Data: &commands.CommandData{
+		Name:         "calc",
 		Description:  "A mathematical calculation command. Use the example: `waf!calculator (10 / 2) + 1`, `waf!calculator 4f (1 / 9)`. The argument `<number>f` sets how many decimal places to display the result. By default the command displays the first two decimal digits, but it also accepts: `0f`, `1f`, `2f`, `3f`, `4f`, `5f`, `6f` and just `f` (for all decimal digits).",
 		Category:     "util",
 		Arguments:    []string{"<number>f[optional]", "expression"},
 		RequiredArgs: 1,
-		Permissions: plugins.CommandPermissions{
+		Permissions: &commands.CommandPermissions{
 			Require: discordgo.PermissionSendMessages,
 			AllowDM: true,
 		},
 	},
-	Handler: Handler,
 }
 
 func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {

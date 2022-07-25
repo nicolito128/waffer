@@ -6,17 +6,17 @@ import (
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/pkg/config"
-	"github.com/nicolito128/waffer/pkg/plugins"
+	"github.com/nicolito128/waffer/pkg/plugins/commands"
 )
 
 // MemberHasPermission checks if a member has the given permission
-func MemberHasPermission(s *discordgo.Session, m *discordgo.MessageCreate, cmd plugins.Plugin[*discordgo.MessageCreate]) bool {
+func MemberHasPermission(s *discordgo.Session, m *discordgo.MessageCreate, cmd *commands.WafferCommand) bool {
 	p, err := s.UserChannelPermissions(m.Author.ID, m.ChannelID)
 	if err != nil {
 		return false
 	}
 
-	if p&int64(cmd.Command.Permissions.Require) == int64(cmd.Command.Permissions.Require) {
+	if p&int64(cmd.Data.Permissions.Require) == int64(cmd.Data.Permissions.Require) {
 		return true
 	}
 
@@ -24,10 +24,10 @@ func MemberHasPermission(s *discordgo.Session, m *discordgo.MessageCreate, cmd p
 }
 
 // AllowDM returns true if the command comes from a DM and cmd.AllowDM is true.
-func AllowDM(s *discordgo.Session, m *discordgo.MessageCreate, cmd plugins.Plugin[*discordgo.MessageCreate]) bool {
+func AllowDM(s *discordgo.Session, m *discordgo.MessageCreate, cmd *commands.WafferCommand) bool {
 	ok, _ := ComesFromDM(s, m)
-	if cmd.Command != nil {
-		if ok && !cmd.Command.Permissions.AllowDM {
+	if cmd.Data != nil {
+		if ok && !cmd.Data.Permissions.AllowDM {
 			return false
 		}
 	}
@@ -74,13 +74,13 @@ func ValidAuthor(s *discordgo.Session, m *discordgo.MessageCreate) bool {
 }
 
 // MessageHasArguments returns true if the message has the correct arguments length.
-func MessageHasArguments(s *discordgo.Session, m *discordgo.MessageCreate, cmd plugins.Plugin[*discordgo.MessageCreate]) bool {
-	if cmd.Command != nil {
-		if cmd.Command.RequiredArgs > 0 {
+func MessageHasArguments(s *discordgo.Session, m *discordgo.MessageCreate, cmd *commands.WafferCommand) bool {
+	if cmd.Data != nil {
+		if cmd.Data.RequiredArgs > 0 {
 			args := strings.Split(strings.Trim(m.Content, " "), " ")
 
-			if len(args) < int(cmd.Command.RequiredArgs) {
-				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You must provide more arguments. Use `%shelp %s` for more information.", config.Config.Prefix, cmd.Name))
+			if len(args) < int(cmd.Data.RequiredArgs) {
+				s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("You must provide more arguments. Use `%shelp %s` for more information.", config.Config.Prefix, cmd.Data.Name))
 				return false
 			}
 		}
@@ -89,9 +89,9 @@ func MessageHasArguments(s *discordgo.Session, m *discordgo.MessageCreate, cmd p
 	return true
 }
 
-func OwnerOnly(s *discordgo.Session, m *discordgo.MessageCreate, cmd plugins.Plugin[*discordgo.MessageCreate]) bool {
-	if cmd.Command != nil {
-		if cmd.Command.Permissions.OwnerOnly {
+func OwnerOnly(s *discordgo.Session, m *discordgo.MessageCreate, cmd *commands.WafferCommand) bool {
+	if cmd.Data != nil {
+		if cmd.Data.Permissions.OwnerOnly {
 			if m.Author.ID == config.Config.OwnerID {
 				return true
 			} else {
@@ -103,8 +103,8 @@ func OwnerOnly(s *discordgo.Session, m *discordgo.MessageCreate, cmd plugins.Plu
 	return true
 }
 
-func HasHelpPetition(s *discordgo.Session, m *discordgo.MessageCreate, cmd plugins.Plugin[*discordgo.MessageCreate]) bool {
-	if cmd.Command != nil {
+func HasHelpPetition(s *discordgo.Session, m *discordgo.MessageCreate, cmd *commands.WafferCommand) bool {
+	if cmd.Data != nil {
 		embed, err := cmd.HelpEmbed()
 		if err != nil {
 			return true

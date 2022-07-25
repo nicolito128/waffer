@@ -3,20 +3,28 @@ package avatar
 import (
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/pkg/plugins"
+	"github.com/nicolito128/waffer/pkg/plugins/commands"
 	"github.com/nicolito128/waffer/pkg/plugins/supermessage"
 )
 
-var Command = plugins.Plugin[*discordgo.MessageCreate]{
-	Name: "avatar",
-	Command: &plugins.CommandData{
+// Create commands.WafferCommand for avatar command
+var Command = &commands.WafferCommand{
+	Plugin: &plugins.Plugin[*discordgo.MessageCreate]{
+		Name:    "avatar",
+		Type:    plugins.MessageCreateType,
+		Handler: Handler,
+	},
+
+	Data: &commands.CommandData{
+		Name:        "avatar",
 		Description: "Returns an embed with the user avatar profile picture. Optional you can mention one member.",
-		Arguments:   []string{"<mention[optional]>"},
-		Permissions: plugins.CommandPermissions{
+		Category:    "info",
+		Arguments:   []string{"[@user]"},
+		Permissions: &commands.CommandPermissions{
 			AllowDM: true,
 			Require: discordgo.PermissionSendMessages,
 		},
 	},
-	Handler: Handler,
 }
 
 func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
