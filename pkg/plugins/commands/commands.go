@@ -52,7 +52,7 @@ func (cmd *WafferCommand) HelpEmbed() (*discordgo.MessageEmbed, error) {
 	}
 
 	if len(cmd.Data.Arguments) > 0 {
-		desc += fmt.Sprintf("**Arguments**: `%s`\n", strings.Join(cmd.Data.Arguments, ", "))
+		desc += fmt.Sprintf("**Arguments**: \n`%s`", strings.Join(cmd.Data.Arguments, "\n"))
 	}
 
 	embed := &discordgo.MessageEmbed{
