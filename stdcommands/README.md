@@ -4,7 +4,7 @@ Standard Commands is a space to store and develop the different commands of the 
 ## Make a Command
 The commands are stored in a folder that represents a single package, then these packages must be imported into the stdcommands.go file. Stdcommands load the different commands when the bot is started.
 
-Each command is imported as a variable containing a generic `Plugin[*discordgo.MessageCreate]` struct, provided by the plugins package located at `./pkg/plugins/plugins.go`.
+Each command is imported as a variable containing a `WafferCommand` struct, provided by the commands package located at `./pkg/plugins/commands/commands.go`.
 
 ## Example
 ```go
