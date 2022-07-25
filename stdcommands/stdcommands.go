@@ -19,6 +19,8 @@ import (
 	"github.com/nicolito128/waffer/stdcommands/info/github"
 	"github.com/nicolito128/waffer/stdcommands/info/help"
 	"github.com/nicolito128/waffer/stdcommands/info/invite"
+	"github.com/nicolito128/waffer/stdcommands/info/server"
+	"github.com/nicolito128/waffer/stdcommands/info/waffer"
 	"github.com/nicolito128/waffer/stdcommands/ping"
 	"github.com/nicolito128/waffer/stdcommands/util/calc"
 	"github.com/nicolito128/waffer/stdcommands/util/say"
@@ -40,6 +42,8 @@ func LoadCommands(s *discordgo.Session) {
 		invite.Command,
 		devserver.Command,
 		github.Command,
+		waffer.Command,
+		server.Command,
 
 		// APIs
 		dog.Command,
