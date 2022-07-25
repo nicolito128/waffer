@@ -46,7 +46,6 @@ func (sm *SuperMessage) StartsWithPrefix(str string) bool {
 func (sm *SuperMessage) Arguments() []string {
 	content := strings.Trim(strings.TrimPrefix(strings.Trim(sm.Content, " "), sm.Command()), " ")
 	args := strings.Split(content, " ")
-	println(content)
 	if len(args) >= 2 {
 		args = args[1:]
 		println(args)

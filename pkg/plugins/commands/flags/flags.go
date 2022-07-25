@@ -87,13 +87,6 @@ func ParseString(content string, tokens ...*Token) []*Flag {
 
 		// If the flag can be catched without -- or -.
 		if token.Default {
-			args := strings.Split(content, " ")
-			if len(args) >= 2 {
-				content = strings.Join(args[1:], "")
-			} else {
-				content = ""
-			}
-
 			if !strings.Contains(content, TokenPrefix+token.Name+" ") || !strings.Contains(content, ShortTokenPrefix+token.Short+"") {
 				flag := &Flag{Data: token}
 				flag.Value = content
