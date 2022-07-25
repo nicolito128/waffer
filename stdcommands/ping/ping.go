@@ -1,6 +1,8 @@
 package ping
 
 import (
+	"fmt"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/pkg/plugins"
 )
@@ -18,5 +20,5 @@ var Command = plugins.Plugin[*discordgo.MessageCreate]{
 }
 
 func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	s.ChannelMessageSend(m.ChannelID, "Pong!")
+	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Pong! `%dms`", s.HeartbeatLatency().Milliseconds()))
 }
