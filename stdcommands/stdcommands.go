@@ -66,7 +66,7 @@ func Command(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	cmd := strings.Replace(strings.Split(m.Content, " ")[0], config.Config.Prefix, "", 1)
+	cmd := strings.Split(strings.Replace(m.Content, config.Config.Prefix, "", 1), " ")[0]
 	command, err := commands.Get(cmd)
 	if err != nil {
 		return

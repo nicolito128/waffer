@@ -16,12 +16,14 @@ import (
 var Arguments = []*flags.Token{
 	{
 		Name:        "f",
+		Short:       "f",
 		Optional:    true,
 		Description: "The number of decimal places to display the result.",
 	},
 	{
-		Name:        "op",
-		Optional:    false,
+		Name:        "operation",
+		Short:       "o",
+		Default:     true,
 		Description: "The operation to calculate.",
 	},
 }
@@ -55,8 +57,8 @@ func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	var operation = flags.GetFlag(f, "op").Value
-	var decimals string
+	var operation, decimals string
+	operation = flags.GetFlag(f, "operation").Value
 
 	if flags.HasFlag(f, "f") {
 		decimals = flags.GetFlag(f, "f").Value
