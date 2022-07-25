@@ -6,7 +6,7 @@ import (
 	"github.com/nicolito128/waffer/pkg/plugins/supermessage"
 )
 
-var link = "https://discord.com/oauth2/authorize?client_id=961017912355864617&scope=bot+applications.commands&permissions=8"
+var link = "https://discord.com/oauth2/authorize?client_id=961017912355864617&scope=bot+applications.commands&permissions=1644905757943"
 
 var Command = plugins.Plugin[*discordgo.MessageCreate]{
 	Name: "invite",
