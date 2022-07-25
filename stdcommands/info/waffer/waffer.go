@@ -2,6 +2,7 @@ package waffer
 
 import (
 	"fmt"
+	"runtime"
 
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/pkg/plugins"
@@ -44,6 +45,10 @@ func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			{Name: "Members", Value: fmt.Sprintf("%d", users), Inline: true},
 			{Name: "Commands", Value: fmt.Sprintf("%d", len(plugins.CommandCollection)), Inline: true},
 			{Name: "Ping", Value: fmt.Sprintf("%dms", s.HeartbeatLatency().Milliseconds()), Inline: true},
+			{Name: "OS", Value: runtime.GOOS, Inline: true},
+			{Name: "Go Version", Value: runtime.Version(), Inline: true},
+			{Name: "Goroutines", Value: fmt.Sprintf("%d", runtime.NumGoroutine()), Inline: true},
+			{Name: "CPU Available", Value: fmt.Sprintf("%d", runtime.NumCPU()), Inline: true},
 		},
 		Footer: &discordgo.MessageEmbedFooter{
 			Text:    "Repository: https://github.com/nicolito128/waffer",
