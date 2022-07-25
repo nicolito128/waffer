@@ -45,7 +45,16 @@ func (sm *SuperMessage) StartsWithPrefix(str string) bool {
 // Arguments returns a []string without the prefix!command element.
 func (sm *SuperMessage) Arguments() []string {
 	content := strings.Trim(strings.TrimPrefix(strings.Trim(sm.Content, " "), sm.Command()), " ")
-	return strings.Split(content, " ")
+	args := strings.Split(content, " ")
+	println(content)
+	if len(args) >= 2 {
+		args = args[1:]
+		println(args)
+	} else {
+		args = []string{}
+	}
+
+	return args
 }
 
 // PlainContent returns the message content without the prefix!command.
