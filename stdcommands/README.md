@@ -11,23 +11,32 @@ Each command is imported as a variable containing a generic `Plugin[*discordgo.M
 package ping
 
 import (
+	"fmt"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/pkg/plugins"
+	"github.com/nicolito128/waffer/pkg/plugins/commands"
 )
 
-var Command = plugins.Plugin[*discordgo.MessageCreate]{
-	Name: "ping",
-	Command: &plugins.CommandData{
+var Command = &commands.WafferCommand{
+	Plugin: &plugins.Plugin[*discordgo.MessageCreate]{
+		Name:    "ping",
+		Type:    plugins.MessageCreateType,
+		Handler: Handler,
+	},
+
+	Data: &commands.CommandData{
+		Name:        "ping",
 		Description: "Ping!",
-		Permissions: plugins.CommandPermissions{
+		Permissions: &commands.CommandPermissions{
 			AllowDM: true,
 			Require: discordgo.PermissionSendMessages,
 		},
 	},
-	Handler: Ping,
 }
 
-func Ping(s *discordgo.Session, m *discordgo.MessageCreate) {
+func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	s.ChannelMessageSend(m.ChannelID, "Pong!")
 }
+
 ```
