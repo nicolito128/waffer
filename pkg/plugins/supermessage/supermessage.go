@@ -60,6 +60,7 @@ func (sm *SuperMessage) ChannelSend(str string, args ...any) (*discordgo.Message
 		Content: message,
 		AllowedMentions: &discordgo.MessageAllowedMentions{
 			Parse: []discordgo.AllowedMentionType{},
+			Roles: []string{},
 		},
 	})
 	return m, err
@@ -74,6 +75,7 @@ func (sm *SuperMessage) ChannelSendEmbed(embed *discordgo.MessageEmbed) (*discor
 		Embed: embed,
 		AllowedMentions: &discordgo.MessageAllowedMentions{
 			Parse: []discordgo.AllowedMentionType{},
+			Roles: []string{},
 		},
 	})
 
