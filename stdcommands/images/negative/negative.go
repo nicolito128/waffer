@@ -3,7 +3,6 @@ package negative
 import (
 	"bytes"
 	"fmt"
-	"io/ioutil"
 	"os"
 
 	"github.com/bwmarrin/discordgo"
@@ -65,27 +64,58 @@ func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 
-	ioutil.WriteFile(fmt.Sprintf("temp/negative.%s", neg.Format), buf.Bytes(), 0644)
+	direction := fmt.Sprintf("temp/negative.%s", neg.Format)
+	file, err := os.OpenFile(direction, os.O_CREATE|os.O_APPEND|os.O_TRUNC|os.O_RDWR, 0666)
+	if err != nil {
+		sm.ChannelSend(fmt.Sprintf("Creating file error: %s", err.Error()))
+		return
+	}
+	defer file.Close()
+
+	send := make(chan bool)
 	del := make(chan bool)
 
 	go func() {
-		sm.ChannelSend("Processing image...")
-		_, err := sm.ChannelSendComplex(&discordgo.MessageSend{
-			File: &discordgo.File{
-				Name:        fmt.Sprintf("/temp/negative.%s", neg.Format),
-				Reader:      bytes.NewReader(buf.Bytes()),
-				ContentType: fmt.Sprintf("image/%s", neg.Format),
-			},
-		})
-
+		_, err = file.Write(buf.Bytes())
 		if err != nil {
-			sm.ChannelSend("Error sending image.")
+			sm.ChannelSend(fmt.Sprintf("Writing file error: %s", err.Error()))
+			send <- false
+			return
+		}
+
+		send <- true
+	}()
+
+	go func() {
+		sm.ChannelSend("Processing image...")
+
+		if <-send {
+			_, err := sm.ChannelSendComplex(&discordgo.MessageSend{
+				File: &discordgo.File{
+					Name:        fmt.Sprintf("/temp/negative.%s", neg.Format),
+					Reader:      bytes.NewReader(buf.Bytes()),
+					ContentType: fmt.Sprintf("image/%s", neg.Format),
+				},
+			})
+
+			if err != nil {
+				sm.ChannelSend("Error sending image.")
+				del <- false
+				return
+			}
+
+		} else {
+			del <- false
+			return
 		}
 
 		del <- true
 	}()
 
 	if <-del {
-		os.Remove(fmt.Sprintf("/temp/negative.%s", neg.Format))
+		os.Remove(direction)
 	}
+
+	close(send)
+	close(del)
 }
