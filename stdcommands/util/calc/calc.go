@@ -52,7 +52,7 @@ func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	sm := supermessage.New(s, m)
 	f := flags.ParseString(sm.PlainContent(), Arguments...)
 
-	if !flags.ResolveFlags(f, Arguments) {
+	if !flags.ResolveFlags(f, Arguments...) {
 		sm.ChannelSend(fmt.Sprintf("**Invalid flags**.\n```\n%s\n```", flags.GetUsages(Arguments...)))
 		return
 	}

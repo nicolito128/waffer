@@ -12,8 +12,24 @@ import (
 	"github.com/nicolito128/superimage"
 	"github.com/nicolito128/waffer/pkg/plugins"
 	"github.com/nicolito128/waffer/pkg/plugins/commands"
+	"github.com/nicolito128/waffer/pkg/plugins/commands/flags"
 	"github.com/nicolito128/waffer/pkg/plugins/supermessage"
 )
+
+var Arguments = []*flags.Token{
+	{
+		Name:        "radio",
+		Short:       "r",
+		Optional:    true,
+		Description: "The blur radio.",
+	},
+	{
+		Name:        "url",
+		Short:       "u",
+		Default:     true,
+		Description: "The image URL.",
+	},
+}
 
 var Command = &commands.WafferCommand{
 	Plugin: &plugins.Plugin[*discordgo.MessageCreate]{
@@ -26,7 +42,7 @@ var Command = &commands.WafferCommand{
 		Name:         "blur",
 		Description:  "Blur an image.",
 		Category:     "images",
-		Arguments:    []string{"<blur radio> <url>.png/.jpg/.jpeg"},
+		Arguments:    strings.Split(flags.GetUsages(Arguments...), "\n"),
 		RequiredArgs: 1,
 		Permissions: &commands.CommandPermissions{
 			AllowDM: true,
@@ -37,32 +53,38 @@ var Command = &commands.WafferCommand{
 
 func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	sm := supermessage.New(s, m)
-	args := sm.Arguments()
+	args := flags.ParseString(sm.PlainContent(), Arguments...)
 
-	if len(args) < 1 {
-		sm.ChannelSend("You must specify a link.")
+	if !flags.ResolveFlags(args, Arguments...) {
+		sm.ChannelSend(fmt.Sprintf("**Invalid flags**.\n```\n%s\n```", flags.GetUsages(Arguments...)))
 		return
 	}
 
-	var link string
-	var radio int
-
-	if len(args) >= 2 {
-		if args[0] == "" || args[0] == " " {
-			radio = 2
+	var r, link string
+	if flags.HasFlag(args, "url") {
+		link = flags.GetFlag(args, "url").Value
+	} else {
+		if len(sm.Create.Attachments) >= 1 {
+			link = sm.Create.Attachments[0].URL
 		} else {
-			val, err := strconv.Atoi(args[0])
-			if err != nil {
-				sm.ChannelSend("You must specify a valid blur radio. Error: ")
-				return
-			}
+			sm.ChannelSend("**Missing image URL or attachment.**")
+			return
+		}
+	}
 
-			radio = val
+	var radio int
+	if flags.HasFlag(args, "radio") {
+		r = flags.GetFlag(args, "radio").Value
+
+		result, err := strconv.Atoi(r)
+		if err != nil {
+			sm.ChannelSend("**Error**. You must specify a valid blur radio")
+			return
 		}
 
-		link = args[1]
+		radio = result
 	} else {
-		link = strings.Join(args, "")
+		radio = 2
 	}
 
 	if link == "" || link == " " {
