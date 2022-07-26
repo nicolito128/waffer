@@ -16,7 +16,7 @@ func MemberHasPermission(s *discordgo.Session, m *discordgo.MessageCreate, cmd *
 		return false
 	}
 
-	if p&int64(cmd.Data.Permissions.Require) == int64(cmd.Data.Permissions.Require) {
+	if int64(cmd.Data.Permissions.Require)&p == int64(cmd.Data.Permissions.Require) {
 		return true
 	}
 
