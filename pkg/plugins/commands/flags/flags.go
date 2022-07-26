@@ -73,8 +73,8 @@ func ParseString(content string, tokens ...*Token) []*Flag {
 
 				// Catching the from:to range value of the flag.
 				from = strings.Index(content, arg) + len(arg)
-				if strings.Contains(content[from:], "--") {
-					to = from + strings.Index(content[from:], "--") - 1
+				if strings.Contains(content[from:], "-") {
+					to = from + strings.Index(content[from:], "-") - 1
 				} else {
 					to = from + len(content[from:])
 				}
@@ -109,7 +109,7 @@ func Values(flags []*Flag) []string {
 }
 
 // ResolveFlags checks if the flags are all valid.
-func ResolveFlags(flags []*Flag, tokens []*Token) bool {
+func ResolveFlags(flags []*Flag, tokens ...*Token) bool {
 	if len(flags) == 0 {
 		return false
 	}
