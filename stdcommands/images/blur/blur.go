@@ -78,7 +78,6 @@ func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 
 		result, err := strconv.Atoi(r)
 		if err != nil {
-			sm.ChannelSend("**Error**. You must specify a valid blur radio")
 			return
 		}
 
