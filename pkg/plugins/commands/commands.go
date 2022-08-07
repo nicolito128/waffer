@@ -31,6 +31,8 @@ type CommandData struct {
 	Category string
 	// Command permissions
 	Permissions *CommandPermissions
+	// Application command
+	Slash *discordgo.ApplicationCommand
 }
 
 type CommandPermissions struct {

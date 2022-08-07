@@ -10,9 +10,10 @@ import (
 
 var Command = &commands.WafferCommand{
 	Plugin: &plugins.Plugin[*discordgo.MessageCreate]{
-		Name:    "ping",
-		Type:    plugins.MessageCreateType,
-		Handler: Handler,
+		Name:        "ping",
+		Type:        plugins.MessageCreateType,
+		Handler:     Handler,
+		Interaction: Interaction,
 	},
 
 	Data: &commands.CommandData{
@@ -22,9 +23,17 @@ var Command = &commands.WafferCommand{
 			AllowDM: true,
 			Require: discordgo.PermissionSendMessages,
 		},
+		Slash: &discordgo.ApplicationCommand{
+			Name:        "ping",
+			Description: "Waffer slash ping",
+		},
 	},
 }
 
 func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Pong! `%dms`", s.HeartbeatLatency().Milliseconds()))
+}
+
+func Interaction(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	s.ChannelMessageSend(i.ChannelID, fmt.Sprintf("Pong! `%dms`", s.HeartbeatLatency().Milliseconds()))
 }

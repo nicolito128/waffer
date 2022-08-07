@@ -29,6 +29,8 @@ type Plugin[T any] struct {
 	Type PluginType
 	// Handler is the function that will be called for the differents plugins
 	Handler func(*discordgo.Session, T)
+	// Discord interaction
+	Interaction func(*discordgo.Session, *discordgo.InteractionCreate)
 }
 
 // Adds a plugin to the collection.

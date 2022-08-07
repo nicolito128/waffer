@@ -1,6 +1,7 @@
 package stdcommands
 
 import (
+	"log"
 	"strings"
 
 	"github.com/bwmarrin/discordgo"
@@ -58,6 +59,8 @@ func LoadCommands(s *discordgo.Session) {
 	)
 
 	s.AddHandler(Command)
+	s.AddHandler(LoadInteraction)
+	s.AddHandler(ExecuteInteraction)
 }
 
 func Command(s *discordgo.Session, m *discordgo.MessageCreate) {
@@ -82,4 +85,25 @@ func Command(s *discordgo.Session, m *discordgo.MessageCreate) {
 		return
 	}
 	go command.Plugin.Handler(s, m)
+}
+
+func LoadInteraction(s *discordgo.Session, g *discordgo.GuildCreate) {
+	for _, c := range commands.CommandCollection {
+		if c.Data != nil && c.Data.Slash != nil {
+			_, err := s.ApplicationCommandCreate(s.State.User.ID, g.ID, c.Data.Slash)
+			if err != nil {
+				log.Panicf("Error creating interaction: %s", err.Error())
+			}
+		}
+	}
+
+}
+
+func ExecuteInteraction(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	cmd, err := commands.Get(i.ApplicationCommandData().Name)
+	if err != nil {
+		return
+	}
+
+	go cmd.Plugin.Interaction(s, i)
 }

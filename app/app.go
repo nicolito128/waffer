@@ -18,7 +18,9 @@ var intents = discordgo.IntentsGuilds |
 	discordgo.IntentsMessageContent |
 	discordgo.IntentGuildMembers |
 	discordgo.IntentsAllWithoutPrivileged |
-	discordgo.IntentGuildPresences
+	discordgo.IntentGuildPresences |
+	discordgo.IntentsAllWithoutPrivileged |
+	discordgo.IntentsGuilds
 
 func Start() {
 	s, err := bot.New(&config.ConnectionConfig{
