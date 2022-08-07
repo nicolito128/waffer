@@ -1,7 +1,6 @@
 package stdcommands
 
 import (
-	"fmt"
 	"log"
 	"strings"
 
@@ -95,8 +94,6 @@ func LoadInteraction(s *discordgo.Session, g *discordgo.GuildCreate) {
 			if err != nil {
 				log.Panicf("Error creating interaction: %s", err.Error())
 			}
-
-			fmt.Println("Loaded interaction:", c.Data.Slash.Name)
 		}
 	}
 
