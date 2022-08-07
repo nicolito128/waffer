@@ -35,5 +35,10 @@ func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func Interaction(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	s.ChannelMessageSend(i.ChannelID, fmt.Sprintf("Pong! `%dms`", s.HeartbeatLatency().Milliseconds()))
+	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: fmt.Sprintf("Pong! `%dms`", s.HeartbeatLatency().Milliseconds()),
+		},
+	})
 }
