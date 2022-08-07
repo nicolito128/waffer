@@ -11,10 +11,9 @@ import (
 
 var Command = &commands.WafferCommand{
 	Plugin: &plugins.Plugin[*discordgo.MessageCreate]{
-		Name:        "help",
-		Type:        plugins.MessageCreateType,
-		Handler:     Handler,
-		Interaction: Interaction,
+		Name:    "help",
+		Type:    plugins.MessageCreateType,
+		Handler: Handler,
 	},
 
 	Data: &commands.CommandData{
@@ -26,24 +25,6 @@ var Command = &commands.WafferCommand{
 		Permissions: &commands.CommandPermissions{
 			AllowDM: true,
 			Require: discordgo.PermissionSendMessages,
-		},
-		Slash: &discordgo.ApplicationCommand{
-			Name:        "help",
-			Description: "Gets help about a command.",
-			Options: []*discordgo.ApplicationCommandOption{
-				{
-					Name:        "command",
-					Description: "The command to get help about.",
-					Options: []*discordgo.ApplicationCommandOption{
-						{
-							Name:         "command",
-							Description:  "The command to get help about.",
-							Type:         discordgo.ApplicationCommandOptionString,
-							Autocomplete: true,
-						},
-					},
-				},
-			},
 		},
 	},
 }
@@ -64,40 +45,4 @@ func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	}
 
 	sm.ChannelSendEmbed(embed)
-
-}
-
-func Interaction(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	var choices []*discordgo.ApplicationCommandOptionChoice
-	clist := commands.CommandCollection
-	for _, cmd := range clist {
-		choices = append(choices, &discordgo.ApplicationCommandOptionChoice{
-			Name: cmd.Data.Name,
-		})
-	}
-
-	// Access options in the order provided by the user.
-	var msgEmbed *discordgo.MessageEmbed
-	options := i.ApplicationCommandData().Options
-	for _, opt := range options {
-		cmd, err := commands.Get(opt.StringValue())
-		if err != nil {
-			return
-		}
-
-		embed, err := cmd.HelpEmbed()
-		if err != nil {
-			return
-		}
-
-		msgEmbed = embed
-	}
-
-	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
-		Type: discordgo.InteractionResponseChannelMessageWithSource,
-		Data: &discordgo.InteractionResponseData{
-			Choices: choices,
-			Embeds:  []*discordgo.MessageEmbed{msgEmbed},
-		},
-	})
 }

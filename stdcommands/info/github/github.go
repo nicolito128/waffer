@@ -11,9 +11,10 @@ var link = "https://github.com/nicolito128/waffer"
 
 var Command = &commands.WafferCommand{
 	Plugin: &plugins.Plugin[*discordgo.MessageCreate]{
-		Name:    "github",
-		Type:    plugins.MessageCreateType,
-		Handler: Handler,
+		Name:        "github",
+		Type:        plugins.MessageCreateType,
+		Handler:     Handler,
+		Interaction: Interaction,
 	},
 
 	Data: &commands.CommandData{
@@ -24,10 +25,19 @@ var Command = &commands.WafferCommand{
 			AllowDM: true,
 			Require: discordgo.PermissionSendMessages,
 		},
+		Slash: &discordgo.ApplicationCommand{
+			Name:        "github",
+			Description: "Shows the link to the GitHub repository.",
+		},
 	},
 }
 
 func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	sm := supermessage.New(s, m.Message)
+	sm.ChannelSend("**Github repository**: %s", link)
+}
+
+func Interaction(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	sm := supermessage.New(s, i.Message)
 	sm.ChannelSend("**Github repository**: %s", link)
 }
