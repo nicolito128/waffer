@@ -1,6 +1,8 @@
 package github
 
 import (
+	"fmt"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/pkg/plugins"
 	"github.com/nicolito128/waffer/pkg/plugins/commands"
@@ -38,6 +40,10 @@ func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 }
 
 func Interaction(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	sm := supermessage.New(s, i.Message)
-	sm.ChannelSend("**Github repository**: %s", link)
+	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: fmt.Sprintf("**Github repository**: %s", link),
+		},
+	})
 }

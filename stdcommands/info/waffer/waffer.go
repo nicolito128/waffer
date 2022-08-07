@@ -32,8 +32,7 @@ var Command = &commands.WafferCommand{
 	},
 }
 
-func Waffer(s *discordgo.Session, m *discordgo.Message) {
-	sm := supermessage.New(s, m)
+func Waffer(s *discordgo.Session, m *discordgo.Message) *discordgo.MessageEmbed {
 	var channels, guilds, users int
 	guilds = len(s.State.Guilds)
 
@@ -47,7 +46,7 @@ func Waffer(s *discordgo.Session, m *discordgo.Message) {
 		}
 	}
 
-	sm.ChannelSendEmbed(&discordgo.MessageEmbed{
+	return &discordgo.MessageEmbed{
 		Title:       "Waffer",
 		Description: "Information about me and how many things I'm doing.",
 		Fields: []*discordgo.MessageEmbedField{
@@ -65,13 +64,30 @@ func Waffer(s *discordgo.Session, m *discordgo.Message) {
 			Text:    "Repository: https://github.com/nicolito128/waffer",
 			IconURL: "https://i.imgur.com/TXjXenF.png",
 		},
-	})
+	}
 }
 
 func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	Waffer(s, m.Message)
+	embed := Waffer(s, m.Message)
+	if embed == nil {
+		return
+	}
+
+	sm := supermessage.New(s, m.Message)
+	sm.ChannelSendEmbed(embed)
 }
 
 func Interaction(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	Waffer(s, i.Message)
+	embed := Waffer(s, i.Message)
+	if embed == nil {
+		return
+	}
+
+	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: "",
+			Embeds:  []*discordgo.MessageEmbed{embed},
+		},
+	})
 }

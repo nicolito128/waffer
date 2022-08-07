@@ -32,7 +32,7 @@ var Command = &commands.WafferCommand{
 	},
 }
 
-func Server(s *discordgo.Session, m *discordgo.Message) {
+func Server(s *discordgo.Session, m *discordgo.Message) *discordgo.MessageEmbed {
 	sm := supermessage.New(s, m)
 	var guild *discordgo.Guild
 
@@ -49,7 +49,7 @@ func Server(s *discordgo.Session, m *discordgo.Message) {
 			Description: "Could not get guild channels.",
 			Color:       0xFF0000,
 		})
-		return
+		return nil
 	}
 
 	var online, idle, dnd int
@@ -74,7 +74,7 @@ func Server(s *discordgo.Session, m *discordgo.Message) {
 		}
 	}
 
-	sm.ChannelSendEmbed(&discordgo.MessageEmbed{
+	return &discordgo.MessageEmbed{
 		Title: guild.Name,
 		Fields: []*discordgo.MessageEmbedField{
 			{Name: "Channels", Value: fmt.Sprintf("%d", channels), Inline: true},
@@ -85,13 +85,30 @@ func Server(s *discordgo.Session, m *discordgo.Message) {
 			Text:    fmt.Sprintf("Guild ID: %s", guild.ID),
 			IconURL: guild.IconURL(),
 		},
-	})
+	}
 }
 
 func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	Server(s, m.Message)
+	embed := Server(s, m.Message)
+	if embed == nil {
+		return
+	}
+
+	sm := supermessage.New(s, m.Message)
+	sm.ChannelSendEmbed(embed)
 }
 
 func Interaction(s *discordgo.Session, i *discordgo.InteractionCreate) {
-	Server(s, i.Message)
+	embed := Server(s, i.Message)
+	if embed == nil {
+		return
+	}
+
+	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: "",
+			Embeds:  []*discordgo.MessageEmbed{embed},
+		},
+	})
 }

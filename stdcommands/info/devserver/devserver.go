@@ -1,6 +1,8 @@
 package devserver
 
 import (
+	"fmt"
+
 	"github.com/bwmarrin/discordgo"
 	"github.com/nicolito128/waffer/pkg/plugins"
 	"github.com/nicolito128/waffer/pkg/plugins/commands"
@@ -30,4 +32,13 @@ var Command = &commands.WafferCommand{
 func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	sm := supermessage.New(s, m.Message)
 	sm.ChannelSend("**Development server**: %s", link)
+}
+
+func Interaction(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: fmt.Sprintf("**Development server**: %s", link),
+		},
+	})
 }
