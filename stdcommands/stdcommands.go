@@ -91,12 +91,7 @@ func Command(s *discordgo.Session, m *discordgo.MessageCreate) {
 func LoadInteraction(s *discordgo.Session, g *discordgo.GuildCreate) {
 	for _, c := range commands.CommandCollection {
 		if c.Data != nil && c.Data.Slash != nil {
-			err := s.ApplicationCommandDelete(s.State.User.ID, g.ID, c.Data.Slash.ID)
-			if err != nil {
-				log.Panicf("Error deleting command %s: %s", c.Data.Slash.ID, err)
-			}
-
-			_, err = s.ApplicationCommandCreate(s.State.User.ID, g.ID, c.Data.Slash)
+			_, err := s.ApplicationCommandCreate(s.State.User.ID, g.ID, c.Data.Slash)
 			if err != nil {
 				log.Panicf("Error creating interaction: %s", err.Error())
 			}
