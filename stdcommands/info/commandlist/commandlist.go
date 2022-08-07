@@ -28,7 +28,7 @@ var Command = &commands.WafferCommand{
 }
 
 func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	sm := supermessage.New(s, m)
+	sm := supermessage.New(s, m.Message)
 	clist := commands.CommandCollection
 
 	var list []string

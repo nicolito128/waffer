@@ -15,19 +15,17 @@ type SuperMessage struct {
 	Self    *discordgo.Message
 	Content string
 	Session *discordgo.Session
-	Create  *discordgo.MessageCreate
 	Prefix  string
 }
 
 var prefix = config.Config.Prefix
 
 // New return a new Message structure.
-func New(s *discordgo.Session, m *discordgo.MessageCreate) *SuperMessage {
+func New(s *discordgo.Session, m *discordgo.Message) *SuperMessage {
 	return &SuperMessage{
-		Self:    m.Message,
+		Self:    m,
 		Content: m.Content,
 		Session: s,
-		Create:  m,
 		Prefix:  prefix,
 	}
 }
@@ -64,7 +62,7 @@ func (sm *SuperMessage) PlainContent() string {
 // ChannelSend sends a message to the message author channel without mentions allowed.
 func (sm *SuperMessage) ChannelSend(str string, args ...any) (*discordgo.Message, error) {
 	message := fmt.Sprintf(str, args...)
-	m, err := sm.Session.ChannelMessageSendComplex(sm.Create.ChannelID, &discordgo.MessageSend{
+	m, err := sm.Session.ChannelMessageSendComplex(sm.Self.ChannelID, &discordgo.MessageSend{
 		Content: message,
 		AllowedMentions: &discordgo.MessageAllowedMentions{
 			Parse: []discordgo.AllowedMentionType{},
@@ -76,10 +74,10 @@ func (sm *SuperMessage) ChannelSend(str string, args ...any) (*discordgo.Message
 
 func (sm *SuperMessage) ChannelSendEmbed(embed *discordgo.MessageEmbed) (*discordgo.Message, error) {
 	if embed.Color == 0 {
-		embed.Color = sm.Session.State.MessageColor(sm.Create.Message)
+		embed.Color = sm.Session.State.MessageColor(sm.Self)
 	}
 
-	m, err := sm.Session.ChannelMessageSendComplex(sm.Create.ChannelID, &discordgo.MessageSend{
+	m, err := sm.Session.ChannelMessageSendComplex(sm.Self.ChannelID, &discordgo.MessageSend{
 		Embed: embed,
 		AllowedMentions: &discordgo.MessageAllowedMentions{
 			Parse: []discordgo.AllowedMentionType{},
@@ -92,21 +90,21 @@ func (sm *SuperMessage) ChannelSendEmbed(embed *discordgo.MessageEmbed) (*discor
 
 func (sm *SuperMessage) ChannelSendEmbedUnsafe(embed *discordgo.MessageEmbed) (*discordgo.Message, error) {
 	if embed.Color == 0 {
-		embed.Color = sm.Session.State.MessageColor(sm.Create.Message)
+		embed.Color = sm.Session.State.MessageColor(sm.Self)
 	}
 
-	return sm.Session.ChannelMessageSendEmbed(sm.Create.ChannelID, embed)
+	return sm.Session.ChannelMessageSendEmbed(sm.Self.ChannelID, embed)
 }
 
 // ChannelSendUnsafe sends a message to the message author channel with mentions allowed.
 func (sm *SuperMessage) ChannelSendUnsafe(str string, args ...any) (*discordgo.Message, error) {
 	message := fmt.Sprintf(str, args...)
-	m, err := sm.Session.ChannelMessageSend(sm.Create.ChannelID, message)
+	m, err := sm.Session.ChannelMessageSend(sm.Self.ChannelID, message)
 	return m, err
 }
 
 // ChannelSendComplex send a message with complex options.
 func (sm *SuperMessage) ChannelSendComplex(data *discordgo.MessageSend) (*discordgo.Message, error) {
-	m, err := sm.Session.ChannelMessageSendComplex(sm.Create.ChannelID, data)
+	m, err := sm.Session.ChannelMessageSendComplex(sm.Self.ChannelID, data)
 	return m, err
 }

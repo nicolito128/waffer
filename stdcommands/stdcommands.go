@@ -100,6 +100,10 @@ func LoadInteraction(s *discordgo.Session, g *discordgo.GuildCreate) {
 }
 
 func ExecuteInteraction(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	if i.Type != discordgo.InteractionApplicationCommand {
+		return
+	}
+
 	cmd, err := commands.Get(i.ApplicationCommandData().Name)
 	if err != nil {
 		return

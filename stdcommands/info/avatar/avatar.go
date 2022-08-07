@@ -30,7 +30,7 @@ var Command = &commands.WafferCommand{
 func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	var avatarURL string
 	var user *discordgo.User
-	sm := supermessage.New(s, m)
+	sm := supermessage.New(s, m.Message)
 
 	if len(m.Mentions) >= 1 {
 		avatarURL = m.Mentions[0].AvatarURL("500x500")

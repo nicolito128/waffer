@@ -28,7 +28,7 @@ var Command = &commands.WafferCommand{
 }
 
 func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	sm := supermessage.New(s, m)
+	sm := supermessage.New(s, m.Message)
 	var guild *discordgo.Guild
 
 	for _, g := range s.State.Guilds {
