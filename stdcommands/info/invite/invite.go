@@ -37,6 +37,11 @@ func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Here is the invite link for your server: %s", link))
 }
 
-func Interaction(s *discordgo.Session, m *discordgo.InteractionCreate) {
-	s.ChannelMessageSend(m.ChannelID, fmt.Sprintf("Here is the invite link for your server: %s", link))
+func Interaction(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	s.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
+		Type: discordgo.InteractionResponseChannelMessageWithSource,
+		Data: &discordgo.InteractionResponseData{
+			Content: fmt.Sprintf("Here is the invite link for your server: %s", link),
+		},
+	})
 }
