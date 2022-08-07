@@ -34,6 +34,14 @@ var Command = &commands.WafferCommand{
 				{
 					Name:        "command",
 					Description: "The command to get help about.",
+					Options: []*discordgo.ApplicationCommandOption{
+						{
+							Name:         "command",
+							Description:  "The command to get help about.",
+							Type:         discordgo.ApplicationCommandOptionString,
+							Autocomplete: true,
+						},
+					},
 				},
 			},
 		},
