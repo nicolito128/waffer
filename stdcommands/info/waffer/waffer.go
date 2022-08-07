@@ -25,11 +25,15 @@ var Command = &commands.WafferCommand{
 			AllowDM: true,
 			Require: discordgo.PermissionSendMessages,
 		},
+		Slash: &discordgo.ApplicationCommand{
+			Name:        "waffer",
+			Description: "Shows Waffer information.",
+		},
 	},
 }
 
-func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	sm := supermessage.New(s, m.Message)
+func Waffer(s *discordgo.Session, m *discordgo.Message) {
+	sm := supermessage.New(s, m)
 	var channels, guilds, users int
 	guilds = len(s.State.Guilds)
 
@@ -62,4 +66,12 @@ func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			IconURL: "https://i.imgur.com/TXjXenF.png",
 		},
 	})
+}
+
+func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
+	Waffer(s, m.Message)
+}
+
+func Interaction(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	Waffer(s, i.Message)
 }

@@ -11,9 +11,10 @@ import (
 
 var Command = &commands.WafferCommand{
 	Plugin: &plugins.Plugin[*discordgo.MessageCreate]{
-		Name:    "server",
-		Type:    plugins.MessageCreateType,
-		Handler: Handler,
+		Name:        "server",
+		Type:        plugins.MessageCreateType,
+		Handler:     Handler,
+		Interaction: Interaction,
 	},
 
 	Data: &commands.CommandData{
@@ -24,11 +25,15 @@ var Command = &commands.WafferCommand{
 			AllowDM: false,
 			Require: discordgo.PermissionSendMessages,
 		},
+		Slash: &discordgo.ApplicationCommand{
+			Name:        "server",
+			Description: "Shows information about the server.",
+		},
 	},
 }
 
-func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
-	sm := supermessage.New(s, m.Message)
+func Server(s *discordgo.Session, m *discordgo.Message) {
+	sm := supermessage.New(s, m)
 	var guild *discordgo.Guild
 
 	for _, g := range s.State.Guilds {
@@ -81,4 +86,12 @@ func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
 			IconURL: guild.IconURL(),
 		},
 	})
+}
+
+func Handler(s *discordgo.Session, m *discordgo.MessageCreate) {
+	Server(s, m.Message)
+}
+
+func Interaction(s *discordgo.Session, i *discordgo.InteractionCreate) {
+	Server(s, i.Message)
 }
