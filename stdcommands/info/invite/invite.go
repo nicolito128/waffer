@@ -8,7 +8,7 @@ import (
 	"github.com/nicolito128/waffer/pkg/plugins/commands"
 )
 
-var link = "https://discord.com/oauth2/authorize?client_id=961017912355864617&scope=bot+applications.commands&permissions=1644401392759 https://discord.com/oauth2/authorize?client_id=961017912355864617&scope=bot+applications.commands&permissions=1644401392759%20applications.commands"
+var link = "https://discord.com/oauth2/authorize?client_id=961017912355864617&scope=bot+applications.commands&permissions=1644401392759%20applications.commands"
 
 var Command = &commands.WafferCommand{
 	Plugin: &plugins.Plugin[*discordgo.MessageCreate]{
